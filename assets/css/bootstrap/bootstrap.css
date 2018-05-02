@@ -77,7 +77,7 @@ body {
   font-weight: 300;
   line-height: 1.8;
   color: #868e96;
-  background-color: #fff; }
+ background-color: #fff; }
 
 [tabindex="-1"]:focus {
   outline: none !important; }
