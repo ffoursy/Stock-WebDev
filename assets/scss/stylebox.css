@@ -1,0 +1,24 @@
+.box-cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  /*background-size: cover;*/
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  height: 500px;
+  padding: 7em 0; }
+  .box-cover .overlay {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; }
+  .box-cover a:hover {
+    color: #fff; }
+  .box-cover h2 {
+    color: #fff; }
+  .box-cover p {
+    color: rgba(255, 255, 255, 0.7); }
+  .box-cover > .container > .row {
+    padding: 7em 0; }

@@ -63,7 +63,7 @@
               <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Welcome to Super Rich</h2>
               <p class="lead mb-5 probootstrap-animate">Hope u like it! </p>
               <p class="probootstrap-animate">
-                <a href="register.html" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3">JOIN US</a>
+                <a href="register.php" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3">JOIN US</a>
               </p>
             </div>
             <div class="col-md probootstrap-animate">
