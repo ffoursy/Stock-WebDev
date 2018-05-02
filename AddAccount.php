@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="assets/css/select2.css">
-
+    <link rel="stylesheet" href="assets/css/stylebox.css">
     <link rel="stylesheet" href="assets/css/helpers.css">
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -29,6 +29,7 @@
       body{
         background-color: #68838B;
       }
+
     </style>
 </head>
 
@@ -53,47 +54,54 @@
       </div>
     </nav>
 
-    <section class="probootstrap-cover overflow-hidden relative" style="margin-top:-70px;">
+    <section class="boxja overflow-hidden relative" style="margin-top:-70px;">
         <div class="container">
           <div class="row">
             <div class="col-md">
-              <h1 class="heading mb-2 display-4 font-light probootstrap-animate" style="color: white;"><b><u>Account Information</u></b></h1>
+              <h1 class="heading mb-2 display-4 font-light probootstrap-animate" style="color: white;"><b>Add New Account</b></h1>
             </div>
           </div>
+          <div class="box">
             <div class="row align-items-center" style="padding:0;">
             <div class="col-md probootstrap-animate">
               <form action="insert_addaccount.php" method="post" class="probootstrap-form" style="margin-top:-85px">
                 <div class="form-group">
                   <div class="row mb-3">
                     <div class="col-sm">
-                      <label for="accountn_label" class="col-sm-2 col-form-label"><b>Account Number: </b></label>
-                      <div class="col-sm-10">
-                        <input type="accountn" class="form-control" id="accountn_label" placeholder="ex. " name="accountn_add" required>
+                      <center><a style=" color:rgb(160, 160, 160)">Please fill in your account information.</style></center><br>
+                      <label for="accountn_label" class="col-sm-8 col-form-label"><b>Account Number: </b></label>
+                      <div class="col-md-12">
+                        <input type="accountn" class="form-control" id="accountn_label" placeholder="ex.1234ABCD" name="accountn_add" required>
                       </div>
-                      <label for="bankid_label" class="col-sm-2 col-form-label"><b>Bank Account Number: </b></label>
-                      <div class="col-sm-10">
-                        <input type="bankn" class="form-control" id="bankn_label" placeholder="Bank Account Number" name="bankn_n" required>
+                      <label for="bankid_label" class="col-sm-8 col-form-label"><b>Bank Account Number: </b></label>
+                      <div class="col-md-12">
+                        <input type="bankn" class="form-control" id="bankn_label" placeholder="XXX-X-XXXXX-X" name="bankn_add" required>
                       </div>
-                      <label for="username_label" class="col-sm-2 col-form-label"><b>Username: </b></label>
-                      <div class="col-sm-10">
-                        <input type="username" class="form-control" id="username_label" placeholder="username" name="username_regist" required>
+                      <label for="type_label" class="col-sm-8 col-form-label"><b>Account Type: </b></label>
+                      <div class="col-sm-2">
+                      <form name="type_add" required>
+                        <select name="type">
+                          <option value="balance">Cash Balance</option>
+                          <option value="credit">Cash Credit</option>
+                        </select>
+                      </form>
                       </div>
-                      <label for="password_label" class="col-sm-2 col-form-label"><b>Password: </b></label>
-                      <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password_label" placeholder="password" name="password_regist" required>
-                      </div>
-                      <label for="email_label" class="col-sm-2 col-form-label"><b>E-mail: </b></label>
+                    <label for="pincode_label" class="col-sm-4 col-form-label"><b>Pincode:</b></label>
+                    <div class="col-md-3">
+                      <input type="pincode" class="form-control" id="pincode_label" placeholder="XXXX" name="pincode_add" required>
+                    </div>
                     </div>
                   </div>
                     <div class="row">
-                      <div class="col-md-3 ml-auto">
-                        <button type="submit" class="btn btn-primary btn-block" >REGISTER</button>
+                      <div class="col-md-6 ml-auto mr-auto">
+                        <br><button type="submit" class="btn btn-primary btn-block" >SUBMIT</button>
                       </div>
                     </div>
                 </div>
               </form>
           </div>
         </div>
+      </div>
       </section>
 
 
