@@ -1,3 +1,21 @@
+<?php
+  session_start();
+  $con=mysqli_connect("localhost","root","","stock_trading");
+  if (mysqli_connect_errno()){
+    echo "Failed to connect to MySQL:" . mysqli_connect_error();
+  }
+  $Username = mysqli_real_escape_string($con,$_POST['username_log']);
+  $Userpassword = mysqli_real_escape_string($con,$_POST['password_log']);
+  $result = mysqli_query($con,"SELECT username
+            FROM personal_data
+            WHERE password = $Userpassword AND username = '$Username'") or die("Error: ".mysqli_error($con));
+  while ($row = mysqli_fetch_array($result)) {
+    $_SESSION['username'] = $row['username'];
+    echo "Username:"." ".$row['username'];
+  }
+  mysqli_close($con);
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +47,7 @@
 </head>
 
 <body >
-  <nav class="navbar navbar-expand-sm navbar-dark probootstrap_navbar">
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -44,7 +62,7 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="listbox" aria-expanded="false">
-              Dropdown
+              <?php echo $_SESSION['username'] ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" ar href="#">Action</a>
@@ -56,7 +74,13 @@
         </ul>
       </div>
     </nav>
+    <section class="probootstrap-cover overflow-hidden relative" >
+      <div class="overlay"></div>
+        <div class="container">
 
+          </div>
+        </div>
+      </section>
 
     <script src="assets/js/jquery.min.js"></script>
 
