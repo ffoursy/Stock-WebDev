@@ -51,7 +51,7 @@
               <a class="dropdown-item" ar href="#">Action</a>
               <a class="dropdown-item" href="#">Another action</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item" href="logout.php">log out</a>
             </div>
           </li>
         </ul>

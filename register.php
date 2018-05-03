@@ -80,13 +80,14 @@
                       </div>
                       <label for="password_label" class="col-sm-2 col-form-label"><b>Password: </b></label>
                       <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password_label" placeholder="password" name="password_regist" required>
+                        <input type="password" pattern=".{8,12}" title="8 to 12 characters" class="form-control" id="password_label" placeholder="password" name="password_regist" required>
+                        <label style="font-size:12px;">Please set password 8 to 12 characters</label>
                       </div>
                       <label for="email_label" class="col-sm-2 col-form-label"><b>E-mail: </b></label>
                       <div class="col-sm-10">
                         <input type="email" class="form-control" id="email_label" placeholder="email" name="email_regist" required>
                       </div>
-                      <label for="phone_label" class="col-sm-2 col-form-label"><b>Phone number: </b></label>
+                      <label for="phone_label" class="col-sm-10 col-form-label"><b>Phone number: </b></label>
                       <div class="col-sm-10">
                         <input type="phone no." class="form-control" id="phone_label" placeholder="phone no." name="phone_regist" required>
                       </div>
