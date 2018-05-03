@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,7 @@
       }
 
       div.text{
-        font-size:80%; 
+        font-size:80%;
         color:rgb(160, 160, 160);
         line-height:1.5;
 
@@ -51,14 +52,22 @@
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
+              <a class="nav-link" href="#">Dashboard</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Dashboard</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="listbox" aria-expanded="false">
+              <?php echo $_SESSION['username'] ?>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" ar href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="logout.php">log out</a>
+            </div>
           </li>
         </ul>
       </div>
-    </nav> 
+    </nav>
 
     <section class="boxja overflow-hidden relative" style="margin-top:-70px;">
         <div class="container">
@@ -89,7 +98,7 @@
                           }
                           echo '</select>';
                           echo '</form>';
-                        ?> 
+                        ?>
                         </div>
                       <label for="transacType_label" class="col-sm-8 col-form-label"><b>Transaction Type: </b></label>
                       <div class="col-sm-10 form-inline">
