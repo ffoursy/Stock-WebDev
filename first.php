@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,8 +71,13 @@
             </div>
             <div class="col-md probootstrap-animate">
               <form action="login.php" method="post" class="probootstrap-form">
+                <?php
+                  if ($_GET['wrongValue']==1) {
+                    echo '<label style="color:red;">'.$_GET['wrongText'].'</label>';
+                  }
+                ?>
                 <div class="form-group">
-                  <div class="row mb-3">
+                  <div class="row mb-4">
                     <div class="col-sm">
                       <label for="username_label" class="col-sm-2 col-form-label"><b>Username: </b></label>
                       <div class="col-sm-10">
@@ -77,7 +85,7 @@
                       </div>
                       <label for="password_label" class="col-sm-2 col-form-label"><b>Password: </b></label>
                       <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password_label" placeholder="password" name="password_log" required>
+                        <input type="password" class="form-control" pattern=".{8,12}" title="8 to 12 characters" id="password_label" placeholder="password" name="password_log" required>
                       </div>
                     </div>
                   </div>
