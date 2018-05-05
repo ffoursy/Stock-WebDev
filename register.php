@@ -29,35 +29,35 @@
       body{
         background-color: #68838B;
       }
+      div.text{
+        font-size:80%;
+        color:rgb(160, 160, 160);
+        line-height:1.5;
+      }
     </style>
 </head>
 
 <body >
-  <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Super Rich</a>
+      <a class="navbar-brand" href="trading.php">Super Rich</a>
       <div class="collapse navbar-collapse" id="probootstrap-menu">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Dashboard</a>
-          </li>
         </ul>
       </div>
     </nav>
+
 
     <section class="probootstrap-cover overflow-hidden relative" style="margin-top:-70px;">
         <div class="container">
           <div class="row">
             <div class="col-md">
-              <h1 class="heading mb-2 display-4 font-light probootstrap-animate" style="color: white;"><b><u>Register Form</u></b></h1>
+              <h1 class="heading mb-2 display-4 font-light probootstrap-animate" style="color: white;"><b>Register Form</b></h1>
             </div>
           </div>
             <div class="row align-items-center" style="padding:0;">
@@ -81,7 +81,7 @@
                       <label for="password_label" class="col-sm-2 col-form-label"><b>Password: </b></label>
                       <div class="col-sm-10">
                         <input type="password" pattern=".{8,12}" title="8 to 12 characters" class="form-control" id="password_label" placeholder="password" name="password_regist" required>
-                        <label style="font-size:12px;">Please set password 8 to 12 characters</label>
+                        <div class="text ">Please set password 8 to 12 characters</div>
                       </div>
                       <label for="email_label" class="col-sm-2 col-form-label"><b>E-mail: </b></label>
                       <div class="col-sm-10">
@@ -118,6 +118,10 @@
     <script src="assets/js/select2.min.js"></script>
 
     <script src="assets/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 
 </body>
 </html>

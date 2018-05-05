@@ -39,31 +39,19 @@
 </head>
 
 <body >
-  <nav class="navbar navbar-expand-sm navbar-dark probootstrap_navbar">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="#">Super Rich</a>
-      <div class="collapse navbar-collapse" id="probootstrap-menu">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Dashboard</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="trading.php">Super Rich</a>
+  </nav>
+
     <section class="probootstrap-cover overflow-hidden relative"  style="background-image: url('images/first_page.jpg');" data-stellar-background-ratio="0.5"  >
       <div class="overlay"></div>
         <div class="container">
           <div class="row align-items-center">
             <div class="col-md">
-              <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Welcome to Super Rich</h2>
+              <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Welcome to<br> Super Rich</h2>
               <p class="lead mb-5 probootstrap-animate">Hope u like it! </p>
               <p class="probootstrap-animate">
                 <a href="register.php" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3">JOIN US</a>

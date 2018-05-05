@@ -15,6 +15,7 @@
     if(mysqli_num_rows($result)==1)
     {
       $_SESSION['username'] = $row['username'];
+      $_SESSION['login'] = 1;
       mysqli_close($con);
       header("location: trading.php");
     }

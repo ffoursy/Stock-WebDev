@@ -35,39 +35,48 @@
         font-size:80%;
         color:rgb(160, 160, 160);
         line-height:1.5;
+      }
 
+      div.error{
+        font-size:80%;
+        color:red;
+        line-height:1.5;
       }
 
     </style>
 </head>
 <body >
-  <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Super Rich</a>
+      <a class="navbar-brand" href="trading.php">Super Rich</a>
       <div class="collapse navbar-collapse" id="probootstrap-menu">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="#">Dashboard</a>
+              <a class="nav-link" href="BfTransaction.php">Transaction</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="listbox" aria-expanded="true">
               <?php echo $_SESSION['username']; ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" ar href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="BfAddAccount.php">Add Account</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="logout.php">log out</a>
+              <a class="dropdown-item" href="logout.php">Log out</a>
             </div>
           </li>
         </ul>
       </div>
     </nav>
+
+<?php
+  if ($_SESSION['login']==0)
+  header("location: first.php?wrongValue=0&wrongText=");
+?>
 
     <section class="boxja overflow-hidden relative" style="margin-top:-70px;">
         <div class="container">
@@ -90,7 +99,8 @@
                           if (mysqli_connect_errno()){
                             echo "Failed to connect to MySQL:" . mysqli_connect_error();
                           }
-                          $result = mysqli_query($con,"SELECT account_number FROM user_account_data /*WHERE Username = '*****Username******'*/"); // Run your query
+                          $UserName = $_SESSION['username'];
+                          $result = mysqli_query($con,"SELECT account_number FROM user_account_data WHERE Username = '$UserName'; /*WHERE Username = '*****Username******'*/"); // Run your query
                           echo '<form name="accountn_tran" required>';
                           echo '<select name="accountn_tran">';
                           while ($row = mysqli_fetch_array($result)) {
@@ -107,22 +117,25 @@
                         </div>
                       <label for="amount_label" class="col-sm-4 col-form-label"><b>Amount:</b></label>
                       <div class="col-md-5">
-                        <input type="amount" class="form-control" id="amount_label" placeholder="Amount" name="amount_tran" required>
+                        <input type="amount" class="form-control" pattern="[1-9]\d*" id="amount_label" placeholder="Amount" name="amount_tran" required>
                       </div>
                       <br><br>
                       <div class="col-md-8 text">Please enter your pincode of the account <br>in order to comfirm this transaction.</div>
                       <label for="pincode_label" class="col-sm-4 col-form-label"><b>Pincode:</b></label>
                       <div class="col-md-3">
-                        <input type="pincode" class="form-control" id="pincode_label" placeholder="XXXX" style="text-align: center" name="pincode_tran" required>
+                      <input type="password" class="form-control" pattern="[0-9]{4}" id="pincode_label" placeholder="XXXX" style="text-align: center" name="pincode_tran" required>
                       </div>
-
-                      <div class="col-md-8 text">Please enter your pincode of the account <br>in order to comfirm this transaction.</div>
-                      <label for="username_label" class="col-sm-4 col-form-label"><b>Username:</b></label>
-                      <div class="col-md-6">
-                        <input type="username" class="form-control" id="username_label" placeholder="Username" name="username_tran" required>
-                      </div>
-
-
+                      <?php
+                      if ($_GET['wrongPin']==1) {
+                        echo '<div class="col-md-8 error">'.$_GET['wrongPinError'].'</div>';
+                      }
+                      else {
+                        date_default_timezone_set("Asia/Bangkok");
+                        $TimeStamp = date("Y-m-d h:i:sa"); 
+                        }
+                      ?>
+                      <input type="hidden" id="timestamp_label" value="<?php echo $TimeStamp ?>" name="timestamp_tran">
+                      <input type="hidden" id="username_label" value="<?php echo $_SESSION['username']?>" name="username_tran">
                     </div>
                   </div>
                     <div class="row">

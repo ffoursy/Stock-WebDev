@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Super Rich</title>
+  <title>Receipt</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
@@ -22,13 +22,31 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="assets/css/select2.css">
-
-
+    <link rel="stylesheet" href="assets/css/stylebox.css">
     <link rel="stylesheet" href="assets/css/helpers.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/eieicss.css">
 
+    <style>
+      body{
+        background-color: #68838B;
+      }
+
+      div.text{
+        font-size:80%;
+        color:rgb(160, 160, 160);
+        line-height:1.5;
+      }
+
+      div.error{
+        font-size:80%;
+        color:red;
+        line-height:1.5;
+      }
+      
+
+    </style>
 </head>
-
 <body >
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,20 +74,45 @@
         </ul>
       </div>
     </nav>
-    
+
 <?php
   if ($_SESSION['login']==0)
   header("location: first.php?wrongValue=0&wrongText=");
 ?>
 
 
-    <section class="probootstrap-cover overflow-hidden relative" >
-      <div class="overlay"></div>
+    <section class="boxeiei overflow-hidden relative" style="margin-top:-70px;">
         <div class="container">
-
+          <div class="row">
+            <div class="col-md">
+              <h1 class="heading mb-2 display-4 font-light probootstrap-animate" style="color: white;"><b>Request Confirmation</b></h1>
+            </div>
+          </div>
+            <div>
+            <div class="col-md probootstrap-animate">
+              <form action="trading.php" method="post" class="probootstrap-form" style="margin-top:-85px">
+                <div class="form-group">
+                  <div class="row mb-3">
+                    <div class="col-sm">
+                    <br><br>
+                    <center><img src="https://image.flaticon.com/icons/svg/291/291201.svg" alt="Success" height="125" width="125"><br>
+                    <a style="font-size:50px; font-weight:400">Success!</a><br>
+                    Your account may need to wait for the approval from the broker.
+                    </center>
+                    <input type="hidden" id="username_label" value="<?php echo $_SESSION['username']?>" name="username_tran">
+                    </div>
+                  </div>
+                    <div class="row">
+                      <div class="col-md-4 ml-auto mr-auto">
+                        <br><button type="submit" class="btn btn-primary btn-block">BACK TO MAIN</button>
+                      </div>
+                    </div>
+                </div>
+              </form>
           </div>
         </div>
       </section>
+
 
     <script src="assets/js/jquery.min.js"></script>
 
@@ -84,9 +127,12 @@
     <script src="assets/js/select2.min.js"></script>
 
     <script src="assets/js/main.js"></script>
+
+    <script src="assets/js/main.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </body>
 </html>
+A
