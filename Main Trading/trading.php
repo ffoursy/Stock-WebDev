@@ -40,6 +40,7 @@
         padding-right: 0px !important;
         /*background-color: #68838B;*/
         background-position: center  !important;
+        background-repeat: repeat-y;
       }
       div.text{
         font-size:80%;
@@ -393,17 +394,24 @@
       <div class="overlay"></div>
         <div class="container">
           <div class="col-md">
-            <a data-target="#loginModal" data-toggle="modal" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3" style="color:white;">
+            <h2 class="heading mb-2 display-4 font-light" style="font-size:30px;">Choose the market</h2>
+            <form>
+                <input class="col-md-3" type="radio" name="marketType" value="SET" checked> SET
+                <input class="col-md-3" type="radio" name="marketType" value="MAI"> MAI
+            </form>
+            <!--<a data-target="#loginModal" data-toggle="modal" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3" style="color:white;">
               Show Popup Form
-            </a>
+            </a>-->
+            <p id="test">
+            </p>
           </div>
         </div>
-        <div class="probootstrap-animate">
+        <!--<div class="probootstrap-animate">-->
         <div class="limiter">
           <div class="container-table100">
               <div class="wrap-table100">
                 <div class="table100">
-                  <table align="center" width="100%">
+                  <table align="center" width="100%" id="stockTable">
                     <thead>
                       <tr class="table100-head">
                         <th class="column1">Symbol</th>
@@ -431,24 +439,28 @@
                         }
                         $sql = "SELECT * FROM stock_data";
                         $result = mysqli_query($con,$sql);
+                        $i=0;
                         while ($row = mysqli_fetch_array($result)) {
-                          echo '<tr>';
-                          echo '<td class="column1">'.$row['stock_symbol'].'</td>';
-                          echo '<td class="column2">'.$row['bid_price'].'</td>';
-                          echo '<td class="column3">'.$row['bid_volume'].'</td>';
-                          echo '<td class="column4">'.$row['offer_price'].'</td>';
-                          echo '<td class="column5">'.$row['offer_volume'].'</td>';
-                          echo '<td class="column6">'.$row['last_price'].'</td>';
-                          echo '<td class="column7">'.$row['change_value'].'</td>';
-                          echo '<td class="column8">'.$row['percent_change'].'</td>';
-                          echo '<td class="column9">'.$row['lastest_close_price'].'</td>';
-                          echo '<td class="column10">'.$row['ceiling_price'].'</td>';
-                          echo '<td class="column11">'.$row['flooring_price'].'</td>';
-                          echo '<td class="column12">'.$row['high_price'].'</td>';
-                          echo '<td class="column13">'.$row['low_price'].'</td>';
-                          echo '<td class="column14">'.$row['total_volume'].'</td>';
-                          echo '<td class="column15">'.$row['total_value'].'</td>';
+                          $stockSym[] = $row['stock_symbol'];
+                          $lastclose[]=$row['lastest_close_price'];
+                          echo '<tr id='.$i.'>';
+                          echo '<td class="column1" data-target=data1>'.$row['stock_symbol'].'</td>';
+                          echo '<td class="column2" data-target=data2>'.$row['bid_price'].'</td>';
+                          echo '<td class="column3" data-target=data3>'.$row['bid_volume'].'</td>';
+                          echo '<td class="column4" data-target=data4>'.$row['offer_price'].'</td>';
+                          echo '<td class="column5" data-target=data5>'.$row['offer_volume'].'</td>';
+                          echo '<td class="column6" data-target=data6>'.$row['last_price'].'</td>';
+                          echo '<td class="column7" data-target=data7>'.$row['change_value'].'</td>';
+                          echo '<td class="column8" data-target=data8>'.$row['percent_change'].'</td>';
+                          echo '<td class="column9" data-target=data9>'.$row['lastest_close_price'].'</td>';
+                          echo '<td class="column10" data-target=data10>'.$row['ceiling_price'].'</td>';
+                          echo '<td class="column11" data-target=data11>'.$row['flooring_price'].'</td>';
+                          echo '<td class="column12" data-target=data12>'.$row['high_price'].'</td>';
+                          echo '<td class="column13" data-target=data13>'.$row['low_price'].'</td>';
+                          echo '<td class="column14" data-target=data14>'.$row['total_volume'].'</td>';
+                          echo '<td class="column15" data-target=data15>'.$row['total_value'].'</td>';
                           echo '</tr>';
+                          $i++;
                         }
                       ?>
                     </tbody>
@@ -457,7 +469,7 @@
               </div>
             </div>
         </div>
-      </div>
+      <!--</div>-->
         <div class="modal fade" role="dialog" id="loginModal" >
           <div class="modal-dialog">
             <div class="modal-content">
@@ -522,6 +534,97 @@
         </div>
       </div>
       </section>
+
+      <script>
+        function updateStock()
+        {
+          var countNum = <?php echo $i;?>;
+          var stockArr = <?php echo json_encode($stockSym)?>;
+          var lastArr = <?php echo json_encode($lastclose)?>;
+          /*document.getElementById("test").innerHTML = stockArr[1];*/
+          for (var i = 0; i < countNum; i++) {
+            var stockSym = stockArr[i];
+            var lastclose = lastArr[i];
+            /*document.getElementById("mySidenav").innerHTML = stock;*/
+            $.ajax({
+              url:"updateStockdata.php",
+              method:"POST",
+              data:{stockSym:stockSym,lastclose:lastclose},
+              dataType: "text",
+              success:function(strMessage){
+                //$('#test').text(strMessage);
+                //document.getElementById("test").innerHTML = stockArr[i];
+              }
+            });
+          }
+        }
+
+        function getStockdata()
+        {
+          var countNum = <?php echo $i;?>;
+          var stockArr = <?php echo json_encode($stockSym)?>;
+          var lastArr = <?php echo json_encode($lastclose)?>;
+          for (var i = 0; i < countNum; i++) {
+            var stockSym = stockArr[i];
+            var lastclose = lastArr[i];
+            //var numI = i;
+            /*$('#stockTable').load("getStockdata.php",{
+              {countNum:numI,stockSym:stockSym}
+            });*/
+            $.ajax({
+              url:"getStockdata.php",
+              method:"POST",
+              data:{stockSym:stockSym},
+              dataType: "JSON",
+              success:function(data){
+                $('#'+i).children('td[data-target=data1]').val(data.stock_symbol);
+                $('#'+i).children('td[data-target=data2]').val(data.bid_price);
+                $('#'+i).children('td[data-target=data3]').val(data.bid_volume);
+                $('#'+i).children('td[data-target=data4]').val(data.offer_price);
+                $('#'+i).children('td[data-target=data5]').val(data.offer_volume);
+                $('#'+i).children('td[data-target=data6]').val(data.last_price);
+                $('#'+i).children('td[data-target=data7]').val(data.change_value);
+                $('#'+i).children('td[data-target=data8]').val(data.percent_change);
+                $('#'+i).children('td[data-target=data9]').val(data.lastest_close_price);
+                $('#'+i).children('td[data-target=data10]').val(data.ceiling_price);
+                $('#'+i).children('td[data-target=data11]').val(data.flooring_price);
+                $('#'+i).children('td[data-target=data12]').val(data.high_price);
+                $('#'+i).children('td[data-target=data13]').val(data.low_price);
+                $('#'+i).children('td[data-target=data14]').val(data.total_volume);
+                $('#'+i).children('td[data-target=data15]').val(data.total_value);
+                //location.reload();
+                /*$('#data1').val(data.stock_symbol);
+                $('#data2').val(data.bid_price);
+                $('#data3').val(data.bid_volume);
+                $('#data4').val(data.offer_price);
+                $('#data5').val(data.offer_volume);
+                $('#data6').val(data.last_price);
+                $('#data7').val(data.change_value);
+                $('#data8').val(data.percent_change);
+                $('#data9').val(data.lastest_close_price);
+                $('#data10').val(data.ceiling_price);
+                $('#data11').val(data.flooring_price);
+                $('#data12').val(data.high_price);
+                $('#data13').val(data.low_price);
+                $('#data14').val(data.total_volume);
+                $('#data15').val(data.total_value);*/
+                //document.getElementById("test").innerHTML = stockArr[0];
+                }
+              });
+          }
+        }
+        function showtext(){
+          alert("hello ja");
+        }
+        $(document).ready(function(){
+
+          /*for (var i = 0; i < countNum; i++) {
+            updateStock(i);
+          }*/
+          setInterval(updateStock,4000);
+          setInterval(getStockdata,5000);
+        });
+      </script>
 
       <script src="assets/js/script.js"></script>
       <script src="assets/js/jquery.min.js"></script>
