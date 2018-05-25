@@ -10,6 +10,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+  <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
+  <script src="sweetalert2/dist/sweetalert2.all.js"></script>
+  <script src="sweetalert2/dist/sweetalert2.js"></script>
+  <script src="https://unpkg.com/promise-polyfill"></script>
+  <link rel="stylesheet" typr="text/css" href="sweetalert2/dist/sweetalert2.css">
 
   <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
   <link rel="stylesheet" href="assets/css/animate.css">
@@ -28,19 +33,16 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/table.css">
 
-    <style>
-      body{
-        background-color: #68838B;
-      }
+<style>
+body{
+  background-color: #68838B;
+}
 
-      div.text{
-        font-size:80%;
-        color:rgb(160, 160, 160);
-        line-height:1.5;
-      }
-
-      
-
+div.text{
+  font-size:80%;
+  color:rgb(160, 160, 160);
+  line-height:1.5;
+}
 
 
 /*//////////////////////////////////////////////////////////////////
@@ -51,7 +53,6 @@
   font-family: OpenSans-Regular;
   src: url('../fonts/OpenSans/OpenSans-Regular.ttf'); 
 }
-
 
 
 /*//////////////////////////////////////////////////////////////////
@@ -99,7 +100,7 @@ ul, li {
 input {
   display: block;
 	outline: none;
-	border: none !important;
+	border: none;
 }
 
 textarea {
@@ -108,7 +109,7 @@ textarea {
 }
 
 textarea:focus, input:focus {
-  border-color: transparent !important;
+  border-color: transparent;
 }
 
 /* ------------------------------------ */
@@ -125,16 +126,6 @@ button:hover {
 iframe {
 	border: none !important;
 }
-
-
-
-
-/*//////////////////////////////////////////////////////////////////
-[ Utiliti ]*/
-
-
-
-
 
 
 /*//////////////////////////////////////////////////////////////////
@@ -296,6 +287,14 @@ tbody tr:hover {
   
 }
 
+.confirm { 
+      border: 0 !important;
+      border-radius: 0.25em;
+      background: initial;
+      background-color: #3085d6;
+      color: #fff;
+      font-size: 1.0625em; }
+
 @media screen and (max-width: 992px) {
   table {
     display: block;
@@ -393,15 +392,17 @@ tbody tr:hover {
   .container-table100 {
     padding-left: 15px;
     padding-right: 15px;
+    padding-top: 15px;
   }
-}
 
-    </style>
+
+}
+</style>
 </head>
-<body >
+<body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon"></span>
       </button>
       <a class="navbar-brand" href="trading.php">Super Rich</a>
       <div class="collapse navbar-collapse" id="probootstrap-menu">
@@ -411,6 +412,9 @@ tbody tr:hover {
           </li>
           <li class="nav-item">
               <a class="nav-link" href="BfTransaction.php">Transaction</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="BfStockOrder.php">Your Order</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="listbox" aria-expanded="true">
@@ -425,19 +429,29 @@ tbody tr:hover {
         </ul>
       </div>
     </nav>
-    
+<script>
+  if (<?php echo $_GET['update']?> == 1)
+    {
+    swal('Update!','Your order has been updated.','success')
+    }
+</script>
+<script>
+if (<?php echo $_GET['cancel']?> == 1)
+    {
+    swal('Cancel!','Your order has been cancelled.','success')
+    }
+</script>
 <section class="boxeiei overflow-hidden relative" style="margin-top:0px;">
     <div class="probootstrap-animate">
         <div class="limiter">
 		      <div class="container-table100">
-         
 			      <div class="wrap-table100">
 				      <div class="table100">
 					    <table>
 						  <thead>
                 <tr class="table100-head">
                   <th class="column1">Order No</th>
-                  <th class="column2">BTS</th>
+                  <th class="column2">Symbol</th>
                   <th class="column3">Time</th>
                   <th class="column4">Type</th>
                   <th class="column5">Volume</th>
@@ -446,8 +460,8 @@ tbody tr:hover {
                   <th class="column8">Balanced</th>
                   <th class="column9">Cancelled</th>
                   <th class="column10">Status</th>
-                  <th class="column11">Change</th>
-                  <th class="column12">Detail</th>
+                  <th class="column11">Edit</th>
+                  <th class="column12">History</th>
                   <th class="column13">Cancel</th>
                 </tr>
               </thead>
@@ -456,9 +470,13 @@ tbody tr:hover {
                 if (mysqli_connect_errno()){
                   echo "Failed to connect to MySQL:" . mysqli_connect_error();
                 }
-              $result = mysqli_query($con,"SELECT * FROM stock_order;");
+              $result = mysqli_query($con,"SELECT * FROM stock_order;"); 
+              $i = 1;
               while ($row = mysqli_fetch_array($result)) {
-                $balanced = $row['order_volume']-$row['temp_match'];
+                $sqlcancel = "SELECT SUM(cancelled_volume) as 'TotalCancel' FROM order_history WHERE order_number = ".$row['order_number'].";";
+                $resultcancel = mysqli_query($con,$sqlcancel);
+                $cancelled = mysqli_fetch_array($resultcancel);
+                $balanced = $row['order_volume']-$row['matched_volume']-$cancelled['TotalCancel'];
                 echo "<tbody>";
                 echo '<tr>
                         <td class="column1">'.$row['order_number'].'</td>
@@ -467,18 +485,99 @@ tbody tr:hover {
                         <td class="column4">'.$row['order_type'].'</td>
                         <td class="column5">'.$row['order_volume'].'</td>
                         <td class="column6">'.$row['order_price'].'</td>
-                        <td class="column7">3'.$row['temp_match'].'</td>
+                        <td class="column7">'.$row['matched_volume'].'</td>
                         <td class="column8">'.$balanced.'</td>
-                        <td class="column9">none</td>
+                        <td class="column9">'.$cancelled['TotalCancel'].'</td>
                         <td class="column10">'.$row['order_status'].'</td>
-                        <td class="column11"><button><img src="https://image.flaticon.com/icons/svg/148/148987.svg" alt="Success" height="25" width="25"></button></td>
-                        <td class="column12"><button><img src="https://image.flaticon.com/icons/svg/148/148928.svg" alt="Success" height="25" width="25"></button></td>
-                        <td class="column13"><button><img src="https://image.flaticon.com/icons/svg/148/148766.svg" alt="Success" height="25" width="25"></button></td>
+                        <td class="column11"><button title="Edit" id="e'.$i.'"><img src="https://image.flaticon.com/icons/svg/148/148987.svg" alt="Success" height="25" width="25"></button></td>
+                        <td class="column12"><button title="Browse" id="b'.$i.'"><img src="https://image.flaticon.com/icons/svg/214/214340.svg" alt="Success" height="25" width="25"></button></td>
+                        <td class="column13"><button title="Cancel" id="c'.$i.'"><img src="https://image.flaticon.com/icons/svg/148/148766.svg" alt="Success" height="25" width="25"></button></td>
                       </tr>';
+                echo "<script>$('#e".$i."').click(function(){swal({
+                        title: '<h1><b>Edit Order</b></h>',
+                        html:
+                          '<br><b>Symbol</b>: ".$row['symbol']."<br><br>'+
+                          '<b>Type</b>: ".$row['order_type']."<br><br>'+
+                          '<form action=","edit_order.php"." method="."post".">'+
+                          '<input type="."hidden"." name="."editedNumber"." value=".$row['order_number']."><br>'+
+                          'Volume: <br>'+
+                          '<input type="."text"." class="."swal2-input"." pattern="."^[1-9][0-9]*$"." name="."editedVolume"." required><br>'+
+                          'Price: <br>'+
+                          '<input type="."text"." class="."swal2-input"." pattern="."^[1-9][0-9.]*$"." name="."editedPrice"." required><br>'+
+                          '<button style="."background-color:#3085d6;"." class="."btn btn-primary btn-block"."type="."submit"." id="."result".">GO</button></form><br>',
+                          showConfirmButton: false,
+                        })});
+                      </script>";
+
+                $sql = "SELECT * FROM order_history WHERE order_number = ".$row['order_number'].";";
+                $history = mysqli_query($con,$sql);
+                $head = "<tr style="."background-color:#eaeaea;"."><th><center>Time</center></th><th><center>Price</center></th><th><center>Matched</center></th><th><center>Cancelled</center></th></tr>";
+                $numrow = 0;
+                while ($row2 = mysqli_fetch_array($history)) 
+                  {
+                  $data[$numrow] = "<tr style="."background-color:white;"."><td><center>".$row2['time_stamp']."</center></td><td><center>".$row2['matched_volume']."</center></td><td><center>".$row2['matched_price']."</center></td><td><center>".$row2['cancelled_volume']."</center></td></tr>";
+                  //echo $numrow."isssss";
+                  $numrow++;
+                  }
+                  //echo "row".$numrow;
+                  $a = '';
+                  $x=0;
+                  if ($numrow==1)
+                    {
+                    $a = $data[0];
+                    }
+                  else 
+                    {
+                      while($x!=$numrow-1)
+                      { 
+                      $a = $data[$x].$data[$x+1];
+                      $data[$x+1] = $a;
+                      $x++;
+                      }
+                    }
+                  echo "<script>$('#b".$i."').click(function(){
+                    swal
+                    ({
+                      title: '<h1><b>Order History</b></h>',
+                      html:
+                        '<br><b>Symbol</b>: ".$row['symbol']."&emsp;&emsp;&emsp;'+
+                        '<b>Type</b>: ".$row['order_type']."<br><br>'+
+                        '<table>".$head.$a."</table>',
+                    })
+                  });
+                  </script>";
+                  if (strcasecmp($row['order_status'],'Cancelled')!=0) {
+                  echo "<script>$('#c".$i."').click(function(){swal({
+                    title: 'Are you sure?',
+                    text: 'You will not be able to revert this!',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, cancel it!'
+                    }).then((result) => {
+                      if (result.value) {
+                        swal({
+                          html:
+                          '<form action="."cancel_order.php"." method="."post".">'+
+                          '<input type="."hidden"." name="."cancelNumber"." value=".$row['order_number'].">'+
+                          '<input type="."hidden"." name="."cancelVolume"." value=".$balanced.">'+
+                          '<input type="."hidden"." name="."cancelStatus"." value=".$row['order_status'].">'+
+                          '<button style="."background-color:#3085d6;"." class="."btn btn-primary btn-block"."type="."submit"." id="."result".">CANCEL</button></form>',
+                          showConfirmButton: false,
+                        })
+                      }
+                    })
+                  });
+                  </script>";
+                  }
+
+                $i += 1;
               }
                 echo "</tbody>";
               ?>
-					    </table>
+              </table>
+              
 				      </div>
 			      </div>
 		      </div>
@@ -486,7 +585,6 @@ tbody tr:hover {
     </div>
   </div>
 </section>
-
 
     <script src="assets/js/jquery.min.js"></script>
 
