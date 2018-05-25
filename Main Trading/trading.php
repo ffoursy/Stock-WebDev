@@ -47,7 +47,15 @@
         color:rgb(160, 160, 160);
         line-height:1.5;
       }
-
+      .footer{
+        background:black;
+        color:white;
+        position:fixed;
+        left:0;
+        bottom:0;
+        width:100%;
+        text-align:center;
+      }
       /*//////////////////////////////////////////////////////////////////
       [ FONT ]*/
 
@@ -390,84 +398,51 @@
       if ($_SESSION['login']==0)
       header("location: first.php?wrongValue=0&wrongText=");
     ?>
-    <section class="probootstrap-cover overflow-hidden relative" >
+    <section class="probootstrap-cover overflow-hidden static" >
       <div class="overlay"></div>
         <div class="container">
           <div class="col-md">
-            <h2 class="heading mb-2 display-4 font-light" style="font-size:30px;">Choose the market</h2>
-            <form>
-                <input class="col-md-3" type="radio" name="marketType" value="SET" checked> SET
-                <input class="col-md-3" type="radio" name="marketType" value="MAI"> MAI
+            <h2 class="heading mb-2 display-4 font-light" style="font-size:30px;"><b>Choose the market</b></h2>
+          </div>
+            <form class="form-inline" style="color:white; font-size:20px;">
+              <div class="col-md-2">
+                <label class="form-check-label"><input class="form-check-input" type="radio" name="marketType" value="SET" onclick="fetchUser(this.value)" checked>SET</label>
+              </div>
+              <div class="col-md-2">
+                <label class="form-check-label"><input class="form-check-input" type="radio" name="marketType" onclick="fetchUser(this.value)" value="MAI">mai</label>
+              </div>
             </form>
             <!--<a data-target="#loginModal" data-toggle="modal" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3" style="color:white;">
               Show Popup Form
             </a>-->
             <p id="test">
             </p>
-          </div>
+
         </div>
+        <!--<script>
+          $(document).ready(function(){
+            if($('input[name="marketType"]').is(':checked'))
+            {
+              var marketType = $('input[name="marketType"]:checked').val();
+              //document.getElementById("marketType").value = marketType;
+            }
+            else {
+
+            }
+          });
+        </script>-->
+        <!--<input type="hidden" id="marketType">-->
         <!--<div class="probootstrap-animate">-->
         <div class="limiter">
           <div class="container-table100">
               <div class="wrap-table100">
-                <div class="table100">
-                  <table align="center" width="100%" id="stockTable">
-                    <thead>
-                      <tr class="table100-head">
-                        <th class="column1">Symbol</th>
-                        <th class="column2">Bid</th>
-                        <th class="column3">Volume Bid</th>
-                        <th class="column4">Offer</th>
-                        <th class="column5">Volume Offer</th>
-                        <th class="column6">Last trade</th>
-                        <th class="column7">Change</th>
-                        <th class="column8">%Change</th>
-                        <th class="column9">Prior</th>
-                        <th class="column10">Ceiling</th>
-                        <th class="column11">Flooring</th>
-                        <th class="column12">High</th>
-                        <th class="column13">Low</th>
-                        <th class="column14">Volumes(shares)</th>
-                        <th class="column15" >Values('000 Baht')</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                        $con=mysqli_connect("localhost","root","","stock_trading");
-                        if (mysqli_connect_errno()){
-                          echo "Failed to connect to MySQL:" . mysqli_connect_error();
-                        }
-                        $sql = "SELECT * FROM stock_data";
-                        $result = mysqli_query($con,$sql);
-                        $i=0;
-                        while ($row = mysqli_fetch_array($result)) {
-                          $stockSym[] = $row['stock_symbol'];
-                          $lastclose[]=$row['lastest_close_price'];
-                          echo '<tr id='.$i.'>';
-                          echo '<td class="column1" data-target=data1>'.$row['stock_symbol'].'</td>';
-                          echo '<td class="column2" data-target=data2>'.$row['bid_price'].'</td>';
-                          echo '<td class="column3" data-target=data3>'.$row['bid_volume'].'</td>';
-                          echo '<td class="column4" data-target=data4>'.$row['offer_price'].'</td>';
-                          echo '<td class="column5" data-target=data5>'.$row['offer_volume'].'</td>';
-                          echo '<td class="column6" data-target=data6>'.$row['last_price'].'</td>';
-                          echo '<td class="column7" data-target=data7>'.$row['change_value'].'</td>';
-                          echo '<td class="column8" data-target=data8>'.$row['percent_change'].'</td>';
-                          echo '<td class="column9" data-target=data9>'.$row['lastest_close_price'].'</td>';
-                          echo '<td class="column10" data-target=data10>'.$row['ceiling_price'].'</td>';
-                          echo '<td class="column11" data-target=data11>'.$row['flooring_price'].'</td>';
-                          echo '<td class="column12" data-target=data12>'.$row['high_price'].'</td>';
-                          echo '<td class="column13" data-target=data13>'.$row['low_price'].'</td>';
-                          echo '<td class="column14" data-target=data14>'.$row['total_volume'].'</td>';
-                          echo '<td class="column15" data-target=data15>'.$row['total_value'].'</td>';
-                          echo '</tr>';
-                          $i++;
-                        }
-                      ?>
-                    </tbody>
-                  </table>
+                <div class="table100" id = "result">
                 </div>
               </div>
             </div>
+        </div>
+        <div class="footer" id="marketData">
+
         </div>
       <!--</div>-->
         <div class="modal fade" role="dialog" id="loginModal" >
@@ -536,93 +511,132 @@
       </section>
 
       <script>
-        function updateStock()
-        {
-          var countNum = <?php echo $i;?>;
-          var stockArr = <?php echo json_encode($stockSym)?>;
-          var lastArr = <?php echo json_encode($lastclose)?>;
-          /*document.getElementById("test").innerHTML = stockArr[1];*/
-          for (var i = 0; i < countNum; i++) {
-            var stockSym = stockArr[i];
-            var lastclose = lastArr[i];
-            /*document.getElementById("mySidenav").innerHTML = stock;*/
-            $.ajax({
-              url:"updateStockdata.php",
-              method:"POST",
-              data:{stockSym:stockSym,lastclose:lastclose},
-              dataType: "text",
-              success:function(strMessage){
-                //$('#test').text(strMessage);
-                //document.getElementById("test").innerHTML = stockArr[i];
-              }
-            });
-          }
-        }
+      function updateStock(market_type)
+      {
+        var marketType = market_type;
+        /*document.getElementById("test").innerHTML = stockArr[1];*/
+          /*document.getElementById("mySidenav").innerHTML = stock;*/
+          $.ajax({
+            url:"updateStockdata.php",
+            method:"POST",
+            data:{marketType:marketType},
+            dataType: "text",
+            success:function(strMessage){
+              //document.getElementById("test").innerHTML = "hi";
+              showtext();
+              //$('#test').text(strMessage);
+              //document.getElementById("test").innerHTML = stockArr[i];
+            }
+          });
 
-        function getStockdata()
+      }
+        function fetchUser(market_type)
         {
-          var countNum = <?php echo $i;?>;
-          var stockArr = <?php echo json_encode($stockSym)?>;
-          var lastArr = <?php echo json_encode($lastclose)?>;
-          for (var i = 0; i < countNum; i++) {
-            var stockSym = stockArr[i];
-            var lastclose = lastArr[i];
+          var marketType = market_type;
             //var numI = i;
             /*$('#stockTable').load("getStockdata.php",{
               {countNum:numI,stockSym:stockSym}
             });*/
             $.ajax({
-              url:"getStockdata.php",
+              url:"loadData.php",
               method:"POST",
-              data:{stockSym:stockSym},
-              dataType: "JSON",
+              data:{marketType:marketType},
               success:function(data){
-                $('#'+i).children('td[data-target=data1]').val(data.stock_symbol);
-                $('#'+i).children('td[data-target=data2]').val(data.bid_price);
-                $('#'+i).children('td[data-target=data3]').val(data.bid_volume);
-                $('#'+i).children('td[data-target=data4]').val(data.offer_price);
-                $('#'+i).children('td[data-target=data5]').val(data.offer_volume);
-                $('#'+i).children('td[data-target=data6]').val(data.last_price);
-                $('#'+i).children('td[data-target=data7]').val(data.change_value);
-                $('#'+i).children('td[data-target=data8]').val(data.percent_change);
-                $('#'+i).children('td[data-target=data9]').val(data.lastest_close_price);
-                $('#'+i).children('td[data-target=data10]').val(data.ceiling_price);
-                $('#'+i).children('td[data-target=data11]').val(data.flooring_price);
-                $('#'+i).children('td[data-target=data12]').val(data.high_price);
-                $('#'+i).children('td[data-target=data13]').val(data.low_price);
-                $('#'+i).children('td[data-target=data14]').val(data.total_volume);
-                $('#'+i).children('td[data-target=data15]').val(data.total_value);
-                //location.reload();
-                /*$('#data1').val(data.stock_symbol);
-                $('#data2').val(data.bid_price);
-                $('#data3').val(data.bid_volume);
-                $('#data4').val(data.offer_price);
-                $('#data5').val(data.offer_volume);
-                $('#data6').val(data.last_price);
-                $('#data7').val(data.change_value);
-                $('#data8').val(data.percent_change);
-                $('#data9').val(data.lastest_close_price);
-                $('#data10').val(data.ceiling_price);
-                $('#data11').val(data.flooring_price);
-                $('#data12').val(data.high_price);
-                $('#data13').val(data.low_price);
-                $('#data14').val(data.total_volume);
-                $('#data15').val(data.total_value);*/
-                //document.getElementById("test").innerHTML = stockArr[0];
+                  $('#result').html(data);
                 }
               });
           }
-        }
-        function showtext(){
-          alert("hello ja");
+        //}
+        function showtext()
+        {
+          alert("hello");
         }
         $(document).ready(function(){
-
+          //if($('input[name="marketType"]').is(':checked'))
+          //{
+          var marketType = $('input[name="marketType"]:checked').val();
+          $.ajax({
+            url:"loadData.php",
+            method:"POST",
+            data:{marketType:marketType},
+            success:function(data){
+                $('#result').html(data);
+              }
+            });
+            /*$.ajax({
+              url:"loadMarket.php",
+              method:"POST",
+              data:{marketType:marketType},
+              success:function(data){
+                  $('#marketData').html(data);
+                }
+              });*/
+            //fetchUser(marketType);
+            //document.getElementById("test").innerHTML = marketType;
+            //setInterval(showtext,3000);
+            //setInterval(fetchUser(marketType),4000);
+            setInterval(function(){
+              // marketType = market_type;
+              /*document.getElementById("test").innerHTML = stockArr[1];*/
+                /*document.getElementById("mySidenav").innerHTML = stock;*/
+                var marketType = $('input[name="marketType"]:checked').val();
+                $.ajax({
+                  url:"updateStockdata.php",
+                  method:"POST",
+                  data:{marketType:marketType},
+                  dataType: "text",
+                  success:function(strMessage){
+                    //document.getElementById("test").innerHTML = "hi";
+                    //showtext();
+                    //$('#test').text(strMessage);
+                    //document.getElementById("test").innerHTML = stockArr[i];
+                  }
+                });
+            },2000);
+            setInterval(function(){
+              var marketType = $('input[name="marketType"]:checked').val();
+              $.ajax({
+                url:"updateMarket.php",
+                method:"POST",
+                data:{marketType:marketType},
+                dataType: "text",
+                success:function(strMessage){
+                  //document.getElementById("test").innerHTML = "hi";
+                  //showtext();
+                  //$('#test').text(strMessage);
+                  //document.getElementById("test").innerHTML = stockArr[i];
+                }
+              });
+            },2000);
+            setInterval(function(){
+              var marketType = $('input[name="marketType"]:checked').val();
+              $.ajax({
+                url:"loadData.php",
+                method:"POST",
+                data:{marketType:marketType},
+                success:function(data){
+                    $('#result').html(data);
+                  }
+                });
+            },3000);
+            setInterval(function(){
+              var marketType = $('input[name="marketType"]:checked').val();
+              $.ajax({
+                url:"loadMarket.php",
+                method:"POST",
+                data:{marketType:marketType},
+                success:function(data){
+                    $('#marketData').html(data);
+                  }
+                });
+            },3000);
+          //}
+          /*setInterval(updateStock(marketType),4000);
+          setInterval(getStockdata(marketType),5000);*/
           /*for (var i = 0; i < countNum; i++) {
             updateStock(i);
           }*/
-          setInterval(updateStock,4000);
-          setInterval(getStockdata,5000);
+
         });
       </script>
 
