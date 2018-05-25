@@ -1,0 +1,55 @@
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 150px;
+}
+
+.sidenav a , .dropdown2-btn, .dropdown2-container .btn-submenu{
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    border: none;
+    outline: none;
+}
+
+.sidenav a:hover , .dropdown2-btn:hover ,.dropdown2-container .btn-submenu:hover{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    margin-top: 80px
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+    background-color: #86F966;
+    color: white;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown2-container {
+    display: none;
+    background-color: #262626;
+    padding-left: 8px;
+}
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
