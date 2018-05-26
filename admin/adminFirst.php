@@ -57,19 +57,19 @@
           <div class="container">
             <div class="row" style="padding-bottom:1em;">
               <div class="col-md">
-                <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Welcome to Super Rich</h2>
+                <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Welcome to Super Rich, <?php echo $_SESSION['username'] ?></h2>
                 <p class="lead mb-5 probootstrap-animate" style="font-size:30px;">Please choose your action</p>
               </div>
             </div>
-            <div class="row" style="padding-top:0em; margin-top:0px;">
+            <div class="row align-items-center" style="padding-top:0em; margin-top:0px;">
               <div class="col-md-3">
-                <button type="button" class="btn btn-primary btn-block" onclick="afterClick()" >Personal Data</button>
+                <button type="button" class="btn btn-primary btn-block probootstrap-animate" onclick="afterClick()" >Personal Data</button>
               </div>
               <div class="col-md-2">
-                <button type="button" class="btn btn-primary btn-block" onclick="afterClick2()" >Add stock</button>
+                <button type="button" class="btn btn-primary btn-block probootstrap-animate" onclick="afterClick2()" >Add stock</button>
               </div>
               <div class="col-md-2">
-                <button type="button" class="btn btn-primary btn-block" onclick="afterClick3()" >Add market</button>
+                <button type="button" class="btn btn-primary btn-block probootstrap-animate" onclick="afterClick3()" >Add market</button>
               </div>
             </div>
           </div>
