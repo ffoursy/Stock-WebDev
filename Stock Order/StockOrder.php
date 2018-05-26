@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/table.css">
+  <link rel="stylesheet" href="assets/css/sidebar.css">
 
 <style>
 body{
@@ -404,6 +405,7 @@ tbody tr:hover {
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
+      <a class="navbar-brand"style="font-size:20px; color: white;cursor:pointer" onclick="openNav()">&#9776;</a>
       <a class="navbar-brand" href="trading.php">Super Rich</a>
       <div class="collapse navbar-collapse" id="probootstrap-menu">
         <ul class="navbar-nav ml-auto">
@@ -429,6 +431,134 @@ tbody tr:hover {
         </ul>
       </div>
     </nav>
+<div id="mySidenav" class="sidenav ">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <!--<a href="#" style="font-size: 20px;">Dashboard</a>-->
+      <!--<a class="nav-link collapsed" href="#submenu1" data-toggle="collapse" data-target="#submenu1">Dashboard</a>
+        <div class="collapse" id="submenu1" aria-expanded="false">
+          <ul class="flex-column pl-2 nav">
+            <li class="nav-item"><a class="nav-link py-0" href="#">Orders</a></li>
+          </ul>
+        </div>
+      </a>-->
+      <a class="dropdown2-btn" style="cursor:pointer;">Your Account
+        <i class="fa fa-caret-down"></i>
+      </a>
+      <div class="dropdown2-container">
+        <?php
+          $con=mysqli_connect("localhost","root","","stock_trading");
+          if (mysqli_connect_errno()){
+            echo "Failed to connect to MySQL:" . mysqli_connect_error();
+          }
+          $Username = $_SESSION['username'];
+          $result = mysqli_query($con,"SELECT ud.account_number
+                  FROM personal_data p JOIN user_account_data ud ON p.username=ud.username
+                  WHERE ud.username='$Username'") or die("Error: ".mysqli_error($con));
+          $i=0;
+          while ($row = mysqli_fetch_array($result)) {
+            echo '<button type="button" class="btn-submenu" style="background-color: #262626; cursor:pointer;" id="account_btn'.$i.'" value="'.$row[0]. '">'.$row[0].'</button>';
+            $i++;
+          }
+          mysqli_close($con);
+        ?>
+      </div>
+      <a class="dropdown2-btn" style="cursor:pointer;">Your Order
+        <i class="fa fa-caret-down"></i>
+      </a>
+      <div class="dropdown2-container">
+        <?php
+          $con=mysqli_connect("localhost","root","","stock_trading");
+          if (mysqli_connect_errno()){
+            echo "Failed to connect to MySQL:" . mysqli_connect_error();
+          }
+          $Username = $_SESSION['username'];
+          $result = mysqli_query($con,"SELECT ud.account_number
+                  FROM personal_data p JOIN user_account_data ud ON p.username=ud.username
+                  WHERE ud.username='$Username'") or die("Error: ".mysqli_error($con));
+          $i=0;
+          while ($row = mysqli_fetch_array($result)) {
+            echo '<button type="button" class="btn-submenu2" style="background-color: #262626; cursor:pointer;" id="account_btn'.$i.'" value="'.$row[0]. '">'.$row[0].'</button>';
+            $i++;
+          }
+          mysqli_close($con);
+        ?>
+      </div>
+      <a href="#" style="font-size: 20px;">Services</a>
+      <a href="#" style="font-size: 20px;">Contact</a>
+    </div>
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "200px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    
+    </script>
+    <script>
+      /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+      var dropdown = document.getElementsByClassName("dropdown2-btn");
+      var i;
+
+      for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var dropdownContent = this.nextElementSibling;
+          if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+          }
+          else {
+            dropdownContent.style.display = "block";
+          }
+        });
+      }
+      $(document).ready(function(){
+         $('.btn-submenu2').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           //$('#id01').html(testja);
+        //for ( i = 0; i < $('.btn-submenu').length; i++) {
+          //$('#account_btn'+i).click(function(){
+            //  $('#id01').html(i);
+            //$('#id01').html($('#account_btn'+i).val());
+             //$('#id01').text('Japan');
+             //var account = $('#account_btn'+i).val();
+             //$('#id01').text('JA');
+
+             $.ajax({
+              url: "BfStockOrder.php?account="+account,
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                $('#id01').html(data.Name);
+                //$('#id01').text('Japan');
+              }
+            });
+          });
+        //}
+
+      });
+    </script>
+    <!-- <script>
+      /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+      var dropdown = document.getElementsByClassName("dropdown2-btn");
+      var i;
+
+      for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var dropdownContent = this.nextElementSibling;
+          if (dropdownContent.style.display === "block") {
+            dropdownContent.style.display = "none";
+          }
+          else {
+            dropdownContent.style.display = "block";
+          }
+        });
+      }
+  </script> -->
 <script>
   if (<?php echo $_GET['update']?> == 1)
     {
@@ -470,7 +600,13 @@ if (<?php echo $_GET['cancel']?> == 1)
                 if (mysqli_connect_errno()){
                   echo "Failed to connect to MySQL:" . mysqli_connect_error();
                 }
-              $result = mysqli_query($con,"SELECT * FROM stock_order;"); 
+              
+              $account_num = $_GET['account'];
+              //echo $account_num;
+              $getaccountid = mysqli_query($con,"SELECT user_account_id FROM user_account_data WHERE account_number = '$account_num';");
+              $accountid = mysqli_fetch_array($getaccountid);
+              //echo $accountid['user_account_id'];
+              $result = mysqli_query($con,"SELECT * FROM stock_order WHERE user_account_id = ".$accountid['user_account_id'].";"); 
               $i = 1;
               while ($row = mysqli_fetch_array($result)) {
                 $sqlcancel = "SELECT SUM(cancelled_volume) as 'TotalCancel' FROM order_history WHERE order_number = ".$row['order_number'].";";
@@ -601,7 +737,8 @@ if (<?php echo $_GET['cancel']?> == 1)
     <script src="assets/js/main.js"></script>
 
     <script src="assets/js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -612,5 +749,7 @@ if (<?php echo $_GET['cancel']?> == 1)
     <script src="TableOrder/vendor/select2/select2.min.js"></script>
     <script src="TableOrder/js/main.js"></script>
     <!-- ============================================================================== -->
+
+    
 </body>
 </html>
