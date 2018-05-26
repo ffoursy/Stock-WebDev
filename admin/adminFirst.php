@@ -65,19 +65,27 @@
               <div class="col-md-3">
                 <button type="button" class="btn btn-primary btn-block" onclick="afterClick()" >Personal Data</button>
               </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-primary btn-block" onclick="afterClick2()" >Add stock</button>
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-primary btn-block" onclick="afterClick3()" >Add market</button>
+              </div>
             </div>
           </div>
       </div>
     <script>
       function afterClick()
       {
-        $.ajax({
-          url: "adminPersonaldata.php",
-          success:function(){
-            //alert("Done!");
-            window.location='adminPersonaldata.php';
-          }
-        });
+        window.location='adminPersonaldata.php';
+      }
+      function afterClick2()
+      {
+        window.location='adminStock.php';
+      }
+      function afterClick3()
+      {
+        window.location='adminMarket.php';
       }
     </script>
     <script src="assets/js/script.js"></script>
