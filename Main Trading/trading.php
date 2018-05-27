@@ -17,7 +17,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
-
+  <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
+  <script src="sweetalert2/dist/sweetalert2.all.js"></script>
+  <script src="sweetalert2/dist/sweetalert2.js"></script>
+  <script src="https://unpkg.com/promise-polyfill"></script>
+  <link rel="stylesheet" typr="text/css" href="sweetalert2/dist/sweetalert2.css">
 		<link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="assets/fonts/ionicons/css/ionicons.min.css">
@@ -33,7 +37,9 @@
 
     <link rel="stylesheet" href="assets/css/helpers.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
+    <link rel="stylesheet" href="assets/css/sidebar.css">
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
       body {
         overflow-y:hidden !important;
@@ -356,15 +362,33 @@
 </head>
 
 <body>
+  <script>
+    if (<?php echo $_SESSION['update']?> == 1)
+    {
+        swal('Update!','Your order has been updated.','success')
+        <?php $_SESSION['update']=0; ?>
+    }
+  </script>
+  <script>
+    if (<?php echo $_SESSION['cancel']?> == 1)
+    {
+    swal('Cancel!','Your order has been cancelled.','success')
+    <?php $_SESSION['cancel']=0; ?>
+    }
+  </script>
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <a class="navbar-brand"style="font-size:20px; color: white;cursor:pointer" onclick="openNav()">&#9776;</a>
       <a class="navbar-brand" href="trading.php">Super Rich</a>
       <div class="collapse navbar-collapse" id="probootstrap-menu">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="trading.php">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="BfAddAccount.php">Add Account</a>
           </li>
           <li class="nav-item">
               <a class="nav-link" href="BfTransaction.php">Transaction</a>
@@ -377,8 +401,6 @@
               <?php echo $_SESSION['username']; ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="BfAddAccount.php">Add Account</a>
-              <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="logout.php">Log out</a>
             </div>
           </li>
@@ -401,48 +423,122 @@
     <section class="probootstrap-cover overflow-hidden static" >
       <div class="overlay"></div>
         <div class="container">
+          <div id="mySidenav" class="sidenav ">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a class="dropdown2-btn" style="cursor:pointer;">Your Account
+              <i class="fa fa-caret-down"></i>
+            </a>
+            <div class="dropdown2-container">
+              <?php
+                $con=mysqli_connect("localhost","root","","stock_trading");
+                if (mysqli_connect_errno()){
+                  echo "Failed to connect to MySQL:" . mysqli_connect_error();
+                }
+                $Username = $_SESSION['username'];
+                $result = mysqli_query($con,"SELECT ud.account_number
+                        FROM personal_data p JOIN user_account_data ud ON p.username=ud.username
+                        WHERE ud.username='$Username'") or die("Error: ".mysqli_error($con));
+                $i=0;
+                while ($row = mysqli_fetch_array($result)) {
+                  echo '<button type="submit" class="btn-submenu" style="background-color: #262626; cursor:pointer;" id="account_btn'.$i.'" value="'.$row[0]. '">'.$row[0].'</button>';
+                  echo '<input type="hidden" name="acc_num" value="'.$row[0].'">';
+                  $i++;
+                }
+                mysqli_close($con);
+              ?>
+            </div>
+
+            <a class="dropdown2-btn" style="cursor:pointer;">Order
+              <i class="fa fa-caret-down"></i>
+            </a>
+            <div class="dropdown2-container">
+              <?php
+                $con=mysqli_connect("localhost","root","","stock_trading");
+                if (mysqli_connect_errno()){
+                  echo "Failed to connect to MySQL:" . mysqli_connect_error();
+                }
+                $Username = $_SESSION['username'];
+                $result = mysqli_query($con,"SELECT ud.account_number
+                        FROM personal_data p JOIN user_account_data ud ON p.username=ud.username
+                        WHERE ud.username='$Username'") or die("Error: ".mysqli_error($con));
+                $i=0;
+                while ($row = mysqli_fetch_array($result)) {
+                  echo '<button type="button" class="btn-submenu2" style="background-color: #262626; cursor:pointer;" id="account_btnOrder'.$i.'" value="'.$row[0]. '">'.$row[0].'</button>';
+                  $i++;
+                }
+                mysqli_close($con);
+              ?>
+            </div>
+
+            <a class="dropdown2-btn" style="cursor:pointer;">Statement
+                <i class="fa fa-caret-down"></i>
+              </a>
+              <div class="dropdown2-container">
+                <?php
+                  $con=mysqli_connect("localhost","root","","stock_trading");
+                  if (mysqli_connect_errno()){
+                    echo "Failed to connect to MySQL:" . mysqli_connect_error();
+                  }
+                  $Username = $_SESSION['username'];
+                  $result = mysqli_query($con,"SELECT ud.account_number
+                          FROM personal_data p JOIN user_account_data ud ON p.username=ud.username
+                          WHERE ud.username='$Username'") or die("Error: ".mysqli_error($con));
+                  $i=0;
+                  while ($row = mysqli_fetch_array($result)) {
+                    echo '<button type="submit" class="btn-submenu3" style="background-color: #262626; cursor:pointer;" id="account_btn'.$i.'" value="'.$row[0]. '">'.$row[0].'</button>';
+                    echo '<input type="hidden" name="acc_num" value="'.$row[0].'">';
+                    $i++;
+                  }
+                  mysqli_close($con);
+                ?>
+              </div>
+
+
+            <a class="dropdown2-btn" style="cursor:pointer;">Report
+              <i class="fa fa-caret-down"></i>
+            </a>
+            <div class="dropdown2-container">
+              <button type="submit" class="btn-submenu4" style="background-color: #262626; cursor:pointer; text-align:left;" id="highTotal" value="5days">Highest Total Value</button>
+              <button type="submit" class="btn-submenu4" style="background-color: #262626; cursor:pointer; text-align:left;" id="highPpu" value="5days">Highest Price per Unit</button>
+              <button type="submit" class="btn-submenu4" style="background-color: #262626; cursor:pointer; text-align:left;" id="proBrok" value="5days">Proportion of customer in each broker</button>
+              <button type="submit" class="btn-submenu4" style="background-color: #262626; cursor:pointer; text-align:left;" id="value5days" value="5days">5-Day Total Trading Value</button>
+              <button type="submit" class="btn-submenu4" style="background-color: #262626; cursor:pointer; text-align:left;" id="traderMarket" value="5days">Trader in each market</button>
+            </div>
+
+            <a href="#" style="font-size: 20px;">Contact</a>
+          </div>
           <div class="col-md">
-            <h2 class="heading mb-2 display-4 font-light" style="font-size:30px;"><b>Choose the market</b></h2>
+            <h2 class="heading mb-2 display-4 font-light" style="font-size:30px;" id="choose_market"><b>Choose the market</b></h2>
           </div>
             <form class="form-inline" style="color:white; font-size:20px;">
               <div class="col-md-2">
-                <label class="form-check-label"><input class="form-check-input" type="radio" name="marketType" value="SET" onclick="fetchUser(this.value)" checked>SET</label>
+                <label id="marketType1" class="form-check-label"><input class="form-check-input" type="radio" name="marketType" value="SET" onclick="fetchUser(this.value)" checked>SET</label>
               </div>
               <div class="col-md-2">
-                <label class="form-check-label"><input class="form-check-input" type="radio" name="marketType" onclick="fetchUser(this.value)" value="MAI">mai</label>
+                <label id="marketType2" class="form-check-label"><input class="form-check-input" type="radio" name="marketType" onclick="fetchUser(this.value)" value="MAI">mai</label>
               </div>
             </form>
-            <!--<a data-target="#loginModal" data-toggle="modal" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3" style="color:white;">
-              Show Popup Form
-            </a>-->
-            <p id="test">
-            </p>
-
         </div>
-        <!--<script>
-          $(document).ready(function(){
-            if($('input[name="marketType"]').is(':checked'))
-            {
-              var marketType = $('input[name="marketType"]:checked').val();
-              //document.getElementById("marketType").value = marketType;
-            }
-            else {
 
-            }
-          });
-        </script>-->
-        <!--<input type="hidden" id="marketType">-->
-        <!--<div class="probootstrap-animate">-->
         <div class="limiter">
           <div class="container-table100">
               <div class="wrap-table100">
-                <div class="table100" id = "result">
+                <div class="col-md">
+                <div class="row">
+                  <h2 id="titleAJAX" style="font-size:30px; color:white;"><b></b></h2>
+                </div>
+                <div id="pieSum2" style="align-items: center;">
+                </div>
+                <br>
+                <div class="table100" id = "dataAJAX">
                 </div>
               </div>
             </div>
+            </div>
         </div>
         <div class="footer" id="marketData">
-
+        </div>
+        <div id="pieSum" style="align-items: center;">
         </div>
       <!--</div>-->
         <div class="modal fade" role="dialog" id="loginModal" >
@@ -507,19 +603,312 @@
           </div>
         </div>
         </div>
+        <!--end modal-->
       </div>
       </section>
-
       <script>
-        $(document).ready(function(){
+        function openNav() {
+          document.getElementById("mySidenav").style.width = "200px";
+        }
 
+        function closeNav() {
+          document.getElementById("mySidenav").style.width = "0";
+        }
+      </script>
+      <script type="text/javascript">
+
+       // Load the Visualization API and the corechart package.
+       google.charts.load('current', {'packages':['corechart']});
+
+     </script>
+      <script  type="text/javascript">
+        /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+        var dropdown = document.getElementsByClassName("dropdown2-btn");
+        var i;
+
+        for (i = 0; i < dropdown.length; i++) {
+          dropdown[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+            }
+            else {
+              dropdownContent.style.display = "block";
+            }
+          });
+        }
+        </script>
+      <script>
+      var interval1;
+      var interval2;
+      var interval3;
+      var interval4;
+      $(document).ready(function(){
+         $('.btn-submenu').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "getProfile.php?account="+account,
+              method:"POST",
+              data:{account:account},
+              dataType:"JSON",
+              success:function(data)
+              {
+                accId = data.accID;
+                $('#titleAJAX').html("Your account number : "+data.accountNum);
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+                $('#pieSum2').hide();
+            },
+            complete:function(){
+              //alert(accId);
+              $.ajax({
+               url: "getOrderinport.php",
+               method:"POST",
+               data:{accId:accId},
+               success:function(data)
+               {
+                 //alert("hello");
+                 $('#dataAJAX').html(data);
+                 clearInterval(interval1);
+                 clearInterval(interval2);
+                 clearInterval(interval3);
+                 clearInterval(interval4);
+                 $.ajax({
+                  url: "getGraph.php",
+                  method:"POST",
+                  data:{accId:accId},
+                  success:function(data)
+                  {
+                    $('#pieSum').show();
+                    $('#pieSum').html(data);
+                  }
+                });
+               },
+            });
+            }
+          });
+        //}
+
+      });
+
+      });
+      $(document).ready(function(){
+         $('.btn-submenu2').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "OrderAJAX.php?account="+account,
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                clearInterval(interval1);
+                clearInterval(interval2);
+                clearInterval(interval3);
+                clearInterval(interval4);
+                $('#titleAJAX').html("Bank Statement of Account: "+account);
+                $('#dataAJAX').html(data);
+                $('#pieSum').hide();
+                $('#pieSum2').hide();
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+                //$('#namePort').Show();
+                //$('#id01').text('Japan');
+              }
+            });
+        });
+      });
+      $(document).ready(function(){
+         $('.btn-submenu3').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "get_statement.php",
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                clearInterval(interval1);
+                clearInterval(interval2);
+                clearInterval(interval3);
+                clearInterval(interval4);
+                $('#titleAJAX').html("Bank Statement of Account: "+account);
+                $('#dataAJAX').show();
+                $('#dataAJAX').html(data);
+                $('#pieSum').hide();
+                $('#pieSum2').hide();
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+                //$('#namePort').Show();
+                //$('#id01').text('Japan');
+              }
+            });
+        });
+      });
+
+      $(document).ready(function(){
+         $('#value5days').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "get5days.php",
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                clearInterval(interval1);
+                clearInterval(interval2);
+                clearInterval(interval3);
+                clearInterval(interval4);
+                $('#titleAJAX').html("5-Day Total Value of Trading in Each Period of Time");
+                $('#dataAJAX').show();
+                $('#dataAJAX').html(data);
+                $('#pieSum').hide();
+                $('#pieSum2').hide();
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+              }
+            });
+        });
+      });
+
+      $(document).ready(function(){
+         $('#highTotal').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "lreportHighestvalue.php",
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                clearInterval(interval1);
+                clearInterval(interval2);
+                clearInterval(interval3);
+                clearInterval(interval4);
+                $('#titleAJAX').html("Top 10 Highest Stock's Value");
+                $('#dataAJAX').show();
+                $('#dataAJAX').html(data);
+                $('#pieSum').hide();
+                $('#pieSum2').hide();
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+              }
+            });
+        });
+      });
+
+      $(document).ready(function(){
+         $('#highPpu').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "lreportPriceperunit.php",
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                clearInterval(interval1);
+                clearInterval(interval2);
+                clearInterval(interval3);
+                clearInterval(interval4);
+                $('#titleAJAX').html("Top 10 Most Expensive Avg. Price per unit");
+                $('#dataAJAX').show();
+                $('#dataAJAX').html(data);
+                $('#pieSum').hide();
+                $('#pieSum2').hide();
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+              }
+            });
+        });
+      });
+
+      $(document).ready(function(){
+         $('#proBrok').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "lreportBrok.php",
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                clearInterval(interval1);
+                clearInterval(interval2);
+                clearInterval(interval3);
+                clearInterval(interval4);
+                $('#titleAJAX').html("Number of trader in each broker");
+                $('#dataAJAX').hide();
+                $('#pieSum').hide();
+                $('#pieSum2').show();
+                $('#pieSum2').html(data);
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+              }
+            });
+        });
+      });
+
+      $(document).ready(function(){
+         $('#traderMarket').click(function(){
+           var photo_id = $(this).attr("id");
+           var account = $(this).val();
+           var accId;
+             $.ajax({
+              url: "reportTrader.php",
+              method:"POST",
+              data:{account:account},
+              success:function(data)
+              {
+                clearInterval(interval1);
+                clearInterval(interval2);
+                clearInterval(interval3);
+                clearInterval(interval4);
+                $('#titleAJAX').html("Number of Trader in each market");
+                $('#dataAJAX').hide();
+                $('#pieSum').hide();
+                $('#pieSum2').show();
+                $('#pieSum2').html(data);
+                $('#choose_market').hide();
+                $('#marketType1').hide();
+                $('#marketType2').hide();
+                $('#marketData').hide();
+              }
+            });
+        });
+      });
+        $(document).ready(function(){
           var marketType = $('input[name="marketType"]:checked').val();
           $.ajax({
             url:"loadData.php",
             method:"POST",
             data:{marketType:marketType},
             success:function(data){
-                $('#result').html(data);
+                $('#dataAJAX').html(data);
               }
             });
             $.ajax({
@@ -530,7 +919,7 @@
                   $('#marketData').html(data);
                 }
               });
-            setInterval(function(){
+            interval1=setInterval(function(){
                 var marketType = $('input[name="marketType"]:checked').val();
                 $.ajax({
                   url:"updateStockdata.php",
@@ -545,7 +934,7 @@
                   }
                 });
             },2000);
-            setInterval(function(){
+            interval2=setInterval(function(){
               var marketType = $('input[name="marketType"]:checked').val();
               $.ajax({
                 url:"updateMarket.php",
@@ -560,18 +949,18 @@
                 }
               });
             },2000);
-            setInterval(function(){
+            interval3=setInterval(function(){
               var marketType = $('input[name="marketType"]:checked').val();
               $.ajax({
                 url:"loadData.php",
                 method:"POST",
                 data:{marketType:marketType},
                 success:function(data){
-                    $('#result').html(data);
+                    $('#dataAJAX').html(data);
                   }
                 });
             },3000);
-            setInterval(function(){
+            interval4=setInterval(function(){
               var marketType = $('input[name="marketType"]:checked').val();
               $.ajax({
                 url:"loadMarket.php",
