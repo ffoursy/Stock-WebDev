@@ -22,7 +22,25 @@
     if (!mysqli_query($con,$sql)) {
       die('Error.' .mysqli_error($con));
     }
-    $sql1 = mysqli_query($con,"SELECT DISTINCT user_name, user_surname FROM user_account_data u INNER JOIN personal_data p ON u.Username = p.username 
+if (strcasecmp($TypeT,'withdraw')==0) 
+  {
+    $sql2 = "UPDATE bank_account SET balance = balance - $AmountT WHERE bank_account_number IN (SELECT bank_account_number 
+                                                                                                FROM user_account_data
+                                                                                                WHERE account_number = '$AccountT');";
+    if (!mysqli_query($con,$sql2)) {
+      die('Error.' .mysqli_error($con));
+    } 
+  }
+else
+  {
+    $sql3 = "UPDATE bank_account SET balance = balance + $AmountT WHERE bank_account_number IN (SELECT bank_account_number 
+                                                                                                FROM user_account_data
+                                                                                                WHERE account_number = '$AccountT');";
+    if (!mysqli_query($con,$sql3)) {
+      die('Error.' .mysqli_error($con));
+    } 
+  }                                                                                              
+    $sql1 = mysqli_query($con,"SELECT DISTINCT user_name, user_surname FROM user_account_data u INNER JOIN personal_data p ON u.username = p.username 
     WHERE user_account_id = (SELECT user_account_id FROM user_account_data WHERE account_number = '$AccountT');");
     $result1 = mysqli_fetch_array($sql1);
     $_SESSION['FirstnameT'] = $result1['user_name'];
