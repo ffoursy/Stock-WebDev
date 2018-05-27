@@ -511,49 +511,8 @@
       </section>
 
       <script>
-      function updateStock(market_type)
-      {
-        var marketType = market_type;
-        /*document.getElementById("test").innerHTML = stockArr[1];*/
-          /*document.getElementById("mySidenav").innerHTML = stock;*/
-          $.ajax({
-            url:"updateStockdata.php",
-            method:"POST",
-            data:{marketType:marketType},
-            dataType: "text",
-            success:function(strMessage){
-              //document.getElementById("test").innerHTML = "hi";
-              showtext();
-              //$('#test').text(strMessage);
-              //document.getElementById("test").innerHTML = stockArr[i];
-            }
-          });
-
-      }
-        function fetchUser(market_type)
-        {
-          var marketType = market_type;
-            //var numI = i;
-            /*$('#stockTable').load("getStockdata.php",{
-              {countNum:numI,stockSym:stockSym}
-            });*/
-            $.ajax({
-              url:"loadData.php",
-              method:"POST",
-              data:{marketType:marketType},
-              success:function(data){
-                  $('#result').html(data);
-                }
-              });
-          }
-        //}
-        function showtext()
-        {
-          alert("hello");
-        }
         $(document).ready(function(){
-          //if($('input[name="marketType"]').is(':checked'))
-          //{
+
           var marketType = $('input[name="marketType"]:checked').val();
           $.ajax({
             url:"loadData.php",
@@ -563,22 +522,15 @@
                 $('#result').html(data);
               }
             });
-            /*$.ajax({
+            $.ajax({
               url:"loadMarket.php",
               method:"POST",
               data:{marketType:marketType},
               success:function(data){
                   $('#marketData').html(data);
                 }
-              });*/
-            //fetchUser(marketType);
-            //document.getElementById("test").innerHTML = marketType;
-            //setInterval(showtext,3000);
-            //setInterval(fetchUser(marketType),4000);
+              });
             setInterval(function(){
-              // marketType = market_type;
-              /*document.getElementById("test").innerHTML = stockArr[1];*/
-                /*document.getElementById("mySidenav").innerHTML = stock;*/
                 var marketType = $('input[name="marketType"]:checked').val();
                 $.ajax({
                   url:"updateStockdata.php",
@@ -630,12 +582,6 @@
                   }
                 });
             },3000);
-          //}
-          /*setInterval(updateStock(marketType),4000);
-          setInterval(getStockdata(marketType),5000);*/
-          /*for (var i = 0; i < countNum; i++) {
-            updateStock(i);
-          }*/
 
         });
       </script>
