@@ -1,0 +1,458 @@
+<?php
+  session_start();
+  function rand_float($st_num,$end_num,$mul=100)
+  {
+    if ($st_num>$end_num) return false;
+    return mt_rand($st_num*$mul,$end_num*$mul)/$mul;
+  }
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Super Rich: Broker</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
+
+		<link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="assets/fonts/ionicons/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="assets/fonts/flaticon/font/flaticon.css">
+
+    <link rel="stylesheet" href="assets/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="assets/css/select2.css">
+
+
+    <link rel="stylesheet" href="assets/css/helpers.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+      body {
+        overflow-y:hidden !important;
+        padding-right: 0px !important;
+    		background: linear-gradient(45deg, #3eaaf7a1, #ffffff);
+    		height: 768px;
+        background-position: center  !important;
+        background-repeat: repeat-y;
+      }
+      div.text{
+        font-size:80%;
+        color:rgb(160, 160, 160);
+        line-height:1.5;
+      }
+      .footer{
+        background:black;
+        color:white;
+        position:fixed;
+        left:0;
+        bottom:0;
+        width:100%;
+        text-align:center;
+      }
+      /*//////////////////////////////////////////////////////////////////
+      [ FONT ]*/
+
+      @font-face {
+        font-family: Work Sans;
+      }
+
+      /*//////////////////////////////////////////////////////////////////
+      [ RESTYLE TAG ]*/
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+      /*body, html {
+        height: 100%;
+        font-family: sans-serif;
+      }*/
+
+      /* ------------------------------------ */
+      a {
+        margin: 0px;
+        transition: all 0.4s;
+        -webkit-transition: all 0.4s;
+        -o-transition: all 0.4s;
+        -moz-transition: all 0.4s;
+      }
+      a:focus {
+        outline: none !important;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      /* ------------------------------------ */
+      h1,h2,h3,h4,h5,h6 {margin: 0px;}
+      p {margin: 0px;}
+      ul, li {
+        margin: 0px;
+        list-style-type: none;
+      }
+      /* ------------------------------------ */
+      input {
+        display: block;
+        outline: none;
+        border: none ;
+      }
+
+      textarea {
+        display: block;
+        outline: none;
+      }
+
+      textarea:focus, input:focus {
+        border-color: transparent !important;
+      }
+
+      /* ------------------------------------ */
+      button {
+        outline: none !important;
+        border: none;
+        background: transparent;
+      }
+
+      button:hover {
+        cursor: pointer;
+      }
+
+      iframe {
+        border: none !important;
+      }
+      /*//////////////////////////////////////////////////////////////////
+      [ Table ]*/
+
+      .limiter {
+        width: 100%;
+        margin: 0px auto;
+        align-items: center;
+      }
+
+      .container-table100 {
+        width: 100%;
+        min-height: 50vh;
+        /*background: #809da7;
+        background: -webkit-linear-gradient(45deg, #3c5d63, #809da7);
+        background: -o-linear-gradient(45deg, #3c5d63, #809da7);
+        background: -moz-linear-gradient(45deg, #3c5d63, #809da7);*/
+        /*background: linear-gradient(45deg, #3c5d63, #809da7);*/
+
+        /*display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;*/
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 33px 30px;
+      }
+      .wrap-table100 {
+        width: 90%;
+      }
+
+      table {
+        border-spacing: 1;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        width: 100%;
+        margin:auto;
+        position: relative;
+        table-layout: auto;
+      }
+
+      table * {
+        position: relative;
+      }
+      table td, table th {
+        padding-left: 10px;
+      }
+      table thead tr {
+        height: 60px;
+        background: #212325;
+      }
+      table tbody tr {
+        height: 50px;
+      }
+      table tbody tr:last-child {
+        border: 0;
+      }
+      table td, table th {
+        text-align: left;
+      }
+      table td.l, table th.l {
+        text-align: right;
+      }
+      table td.c, table th.c {
+        text-align: center;
+      }
+      table td.r, table th.r {
+        text-align: center;
+      }
+
+
+      .table100-head th{
+        font-family: sans-serif;
+        font-size: 16px;
+        color: #fff;
+        line-height: 1.2;
+        font-weight: unset;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f5f5f5;
+      }
+
+      tbody tr {
+        font-family: sans-serif;
+        font-size: 14px;
+        color: #808080;
+        line-height: 1.2;
+        font-weight: unset;
+      }
+
+      tbody tr:hover {
+        color: #555555;
+        background-color: #f5f5f5;
+        cursor: initial;
+      }
+
+      .column1 {
+        width: 120px;
+        text-align: center;
+        padding-left:20px;
+      }
+
+      .column2 {
+        width: 100px;
+        text-align: center;
+      }
+
+      .column3 {
+        width: 200px;
+        text-align: center;
+
+      }
+
+      .column4 {
+        width: 100px;
+        text-align: center;
+      }
+
+      .column5 {
+        width: 100px;
+        text-align: center;
+      }
+
+      .column6 {
+        width: 150px;
+        text-align: center;
+      }
+      .column7 {
+        width: 100px;
+        text-align: center;
+      }
+      .column8 {
+        width: 100px;
+        text-align: center;
+      }
+      .column9 {
+        width: 100px;
+        text-align: center;
+      }
+      .column10 {
+        width: 150px;
+        text-align: center;
+      }
+      .column11 {
+        width: 100px;
+        text-align: center;
+      }
+      .column12 {
+        width: 100px;
+        text-align: center;
+      }
+      .column13 {
+        width: 100px;
+        text-align: center;
+      }
+      .column14 {
+        width: 100px;
+        text-align: center;
+      }
+      .column15 {
+        width: 120px;
+        text-align: center;
+        padding-right:20px;
+
+      }
+
+      @media screen and (max-width: 1080px) {
+        table {
+          display: block;
+        }
+        table > *, table tr, table td, table th {
+          display: block;
+        }
+        table thead {
+          display: none;
+        }
+        table tbody tr {
+          height: auto;
+          padding: 37px 0;
+        }
+        table tbody tr td {
+          padding-left: 40% !important;
+          margin-bottom: 24px;
+        }
+        table tbody tr td:last-child {
+          margin-bottom: 0;
+        }
+        table tbody tr td:before {
+          /*font-family: sans-serif;*/
+          font-size: 14px;
+          color: #999999;
+          line-height: 1.2;
+          font-weight: unset;
+          position: absolute;
+          width: 40%;
+          left: 30px;
+          top: 0;
+        }
+
+        .column7,
+        .column8,
+        .column9,
+        .column10,
+        .column11,
+        .column12,
+        .column13,
+        .column14,
+        .column15,
+        .column4,
+        .column5,
+        .column6,
+        .column1,
+        .column2,
+        .column3 {
+          width: 100%;
+        }
+
+        tbody tr {
+          font-size: 13px;
+        }
+      }
+
+mine:hover {
+    background-color: yellow;
+}
+    </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark probootstrap_navbar" style="font-family:Work Sans;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#probootstrap-menu" aria-controls="probootstrap-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="brokerFirst.php">Super Rich</a>
+        <div class="collapse navbar-collapse" id="probootstrap-menu">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="brokerFirst.php">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="listbox" aria-expanded="true">
+                <?php echo $_SESSION['username']; ?>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="logout.php">log out</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <?php
+      if ($_SESSION['login']==0)
+      header("location: first.php?wrongValue=0&wrongText=");
+    ?>
+
+    <?php
+      date_default_timezone_set("Asia/Bangkok");
+      $timestamp = date("Y-m-d h:i:sa");
+      $_SESSION['timestamp']=$timestamp;
+      if ($_SESSION['login']==0)
+      header("location: first.php?wrongValue=0&wrongText=");
+    ?>
+    <section class="boxeiei probootstrap-cover overflow-hidden static" >
+      <div class="overlay"></div>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-md">
+            <?php
+              $con=mysqli_connect("localhost","root","","stock_trading");
+              if (mysqli_connect_errno()){
+                echo "Failed to connect to MySQL:" . mysqli_connect_error();
+              }
+              $Username = $_SESSION['username'];
+              $sql = mysqli_query($con,"SELECT user_name FROM personal_data WHERE username = '$Username';");
+              $result = mysqli_fetch_array($sql);
+              $_SESSION['brokerName'] = $result['user_name'];
+              ?>
+              <h2 class="heading mb-2 display-4 font-light probootstrap-animate">Welcome <br><a style="color:#212529a3"><?php echo $_SESSION['brokerName']?></a><br>to Super Rich</h2>
+              <p class="lead mb-5 probootstrap-animate">Thank you for joining us! </p>
+              <div class="col-md">
+              <p class="probootstrap-animate">
+                <a href="BfSetPin.php" role="button" class="btn btn-primary " style="width:250px">SET CUSTOMER PIN</a><br><br>
+                <a href="CustomerOfBroke.php" role="button" class="btn btn-primary " style="width:250px">CUSTOMER PORT</a>
+              </p><br>
+              <!-- <div class="dropdown probootstrap-animate">
+                <button class="btn btn-primary dropdown-toggle" style="width:250px" type="button" data-toggle="dropdown">CUSTOMER INFO
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu" style="background-color:white;">
+                  <li><a href="#" class="btn btn-primary" style="background-color:white; color:black; border-color:white; width:250px;">HTML</a></li>
+                  <li><a href="#" class="btn btn-primary" style="background-color:white; color:black; border-color:white; width:250px;">CSS</a></li>
+                  <li><a href="#" class="btn btn-primary" style="background-color:white; color:black; border-color:white; width:250px;">JavaScript</a></li>
+                </ul>
+              </div> -->
+
+            </div>
+
+            </div>
+          </div>
+      </div>
+    </section>
+
+      </script>
+
+      <script src="assets/js/script.js"></script>
+      <script src="assets/js/jquery.min.js"></script>
+
+      <script src="assets/js/popper.min.js"></script>
+      <script src="assets/js/bootstrap.min.js"></script>
+      <script src="assets/js/owl.carousel.min.js"></script>
+
+      <script src="assets/js/bootstrap-datepicker.js"></script>
+      <script src="assets/js/jquery.waypoints.min.js"></script>
+      <script src="assets/js/jquery.easing.1.3.js"></script>
+
+      <script src="assets/js/select2.min.js"></script>
+
+      <script src="assets/js/main.js"></script>
+      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+      <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
