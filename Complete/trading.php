@@ -526,9 +526,9 @@
               <div class="wrap-table100">
                 <div class="col-md">
                 <div class="row">
-                  <h2 id="titleAJAX" style="font-size:30px; color:white;"><b></b></h2>
+                  <h2 id="titleAJAX" style="font-size:30px; color:white; padding-left:1em;"><b></b></h2>
                 </div>
-                <div id="pieSum2" style="align-items: center;">
+                <div id="pieSum2" style="align-items: center; display: inline-block; padding-left:20em;">
                 </div>
                 <br>
                 <div class="table100" id = "dataAJAX">
@@ -539,7 +539,7 @@
         </div>
         <div class="footer" id="marketData">
         </div>
-        <div id="pieSum" style="align-items: center;">
+        <div id="pieSum" style="text-align:center; display: inline-block; padding-left:27em;">
         </div>
       <!--</div>-->
         <div class="modal fade" role="dialog" id="loginModal" >
@@ -864,7 +864,7 @@
                 $('#dataAJAX').hide();
                 $('#pieSum').hide();
                 $('#pieSum2').show();
-                $('#pieSum2').html(data);
+                $('#pieSum2').html("<br>"+data);
                 $('#choose_market').hide();
                 $('#marketType1').hide();
                 $('#marketType2').hide();
@@ -893,7 +893,7 @@
                 $('#dataAJAX').hide();
                 $('#pieSum').hide();
                 $('#pieSum2').show();
-                $('#pieSum2').html(data);
+                $('#pieSum2').html("<br>"+data);
                 $('#choose_market').hide();
                 $('#marketType1').hide();
                 $('#marketType2').hide();
