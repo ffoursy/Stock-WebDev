@@ -37,7 +37,21 @@
     $sql = "SELECT * FROM order_history WHERE order_number = ".$row['order_number'].";";
     $history = mysqli_query($con,$sql);
     $Numhis = mysqli_num_rows($history);
-    $balanced = $row['order_volume']-$row['matched_volume']-$cancelled['TotalCancel'];
+
+    $sql2 = "SELECT SUM(matched_volume) AS matched FROM order_history WHERE order_number = ".$row['order_number'].";";
+    $result2 = mysqli_query($con,$sql2);
+    $roww = mysqli_fetch_array($result2);
+    if ($roww['matched']==NULL) {
+      $roww['matched'] = 0;
+    }
+
+    $balanced = $row['order_volume']-$roww['matched']-$cancelled['TotalCancel'];
+    if ($row['order_volume']==$roww['matched'])
+      {
+    $row['order_status'] = "Completed";
+    // $sql3 = "UPDATE stock_order SET order_status = 'Completed' WHERE order_number = ".$row['order_number'].";";
+    // $result = mysqli_query($con,$sql3);
+      }
     $output .= "<tbody>";
     $output .= '<tr>
             <td class="column1">'.$row['order_number'].'</td>
@@ -46,7 +60,7 @@
             <td class="column4">'.$row['order_type'].'</td>
             <td class="column5">'.$row['order_volume'].'</td>
             <td class="column6">'.$row['order_price'].'</td>
-            <td class="column7">'.$row['matched_volume'].'</td>
+            <td class="column7">'.$roww['matched'].'</td>
             <td class="column8">'.$balanced.'</td>';
             if ($Numhis==0) {
 $output .= '<td class="column9">0</td>';}
@@ -57,6 +71,7 @@ $output .= '<td class="column10">'.$row['order_status'].'</td>
             <td class="column12"><button title="Browse" id="b'.$i.'"><img src="https://image.flaticon.com/icons/svg/214/214340.svg" alt="Success" height="25" width="25"></button></td>
             <td class="column13"><button title="Cancel" id="c'.$i.'"><img src="https://image.flaticon.com/icons/svg/148/148766.svg" alt="Success" height="25" width="25"></button></td>
           </tr>';
+    if (strcasecmp($row['order_status'],'On process')==0) {
     $output .= "<script>$('#e".$i."').click(function(){swal({
             title: '<h1><b>Edit Order</b></h>',
             html:
@@ -72,19 +87,32 @@ $output .= '<td class="column10">'.$row['order_status'].'</td>
               '<button style="."background-color:#3085d6;"." class="."btn btn-primary btn-block"."type="."submit"." id="."result".">GO</button></form><br>',
               showConfirmButton: false,
             })});
-          </script>";
+          </script>"; 
+          }
    // echo "HAVE ".mysqli_num_rows($hisory)."ORDER";
-    $head = "<tr style="."background-color:#eaeaea;"."><th style="."padding-left:20px;"."><center>Time</center></th><th><center>Price</center></th><th><center>Matched</center></th><th style="."padding-right:20px;"."><center>Cancelled</center></th></tr>";
+    $head = "<tr style="."background-color:#eaeaea;"."><th style="."padding-left:20px;"."><center>Time</center></th><th><center>Matched</center></th><th><center>Price</center></th><th style="."padding-right:20px;"."><center>Cancelled</center></th></tr>";
     $numrow = 0;
+    $empty = 0;
     while ($row2 = mysqli_fetch_array($history)) 
       {
-      $data[$numrow] = "<tr style="."background-color:white;"."><td style="."padding-left:30px;".">".$row2['time_stamp']."</td><td><center>".$row2['matched_volume']."</center></td><td><center>".$row2['matched_price']."</center></td><td><center>".$row2['cancelled_volume']."</center></td></tr>";
-      //echo $numrow."isssss";
-      $numrow++;
+      if ( ($row2['matched_volume']==0) && ($row2['matched_price']==0) && ($row2['cancelled_volume']==0) )
+        {
+          $data[$numrow] = "";
+          if (mysqli_num_rows($history)==1)
+            {
+              $empty = 1;
+            }
+        }
+      else
+        {
+        $data[$numrow] = "<tr style="."background-color:white;"."><td style="."padding-left:30px;".">".$row2['time_stamp']."</td><td><center>".$row2['matched_volume']."</center></td><td><center>".$row2['matched_price']."</center></td><td><center>".$row2['cancelled_volume']."</center></td></tr>";
+        //echo $numrow."isssss";
+        }
+        $numrow++;
       }
       $AmountOrder = mysqli_num_rows($history);
       $a = '';
-      if ($numrow==0)
+      if (($numrow==0) || ($empty==1))
         {
         $a = "<tr><td colspan="."4"."><center>No History</center></td><tr>";
         }
@@ -116,7 +144,7 @@ $output .= '<td class="column10">'.$row['order_status'].'</td>
         })
       });
       </script>";
-      if (strcasecmp($row['order_status'],'Cancelled')!=0) {
+      if (strcasecmp($row['order_status'],'On process')==0) {
       $output .= "<script>$('#c".$i."').click(function(){swal({
         title: 'Are you sure?',
         text: 'You will not be able to revert this!',
