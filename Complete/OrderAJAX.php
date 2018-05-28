@@ -2,14 +2,14 @@
   $con=mysqli_connect("localhost","root","","stock_trading");
     if (mysqli_connect_errno()){
       echo "Failed to connect to MySQL:" . mysqli_connect_error();
-    }  
+    }
   $account_num = $_POST['account'];
   //echo $account_num;
   $getaccountid = mysqli_query($con,"SELECT user_account_id FROM user_account_data WHERE account_number = '$account_num';");
   $accountid = mysqli_fetch_array($getaccountid);
   $id = $accountid['user_account_id'];
   //echo $accountid['user_account_id'];
-  $result = mysqli_query($con,"SELECT * FROM stock_order WHERE user_account_id = '$id';"); 
+  $result = mysqli_query($con,"SELECT * FROM stock_order WHERE user_account_id = $id ;");
   $output = '';
   $output .= '<table>
   <thead>
@@ -49,8 +49,8 @@
     if ($row['order_volume']==$roww['matched'])
       {
     $row['order_status'] = "Completed";
-    // $sql3 = "UPDATE stock_order SET order_status = 'Completed' WHERE order_number = ".$row['order_number'].";";
-    // $result = mysqli_query($con,$sql3);
+    $sql3 = "UPDATE stock_order SET order_status = 'Completed' WHERE order_number = ".$row['order_number'].";";
+     $result3 = mysqli_query($con,$sql3);
       }
     $output .= "<tbody>";
     $output .= '<tr>
@@ -87,13 +87,13 @@ $output .= '<td class="column10">'.$row['order_status'].'</td>
               '<button style="."background-color:#3085d6;"." class="."btn btn-primary btn-block"."type="."submit"." id="."result".">GO</button></form><br>',
               showConfirmButton: false,
             })});
-          </script>"; 
+          </script>";
           }
    // echo "HAVE ".mysqli_num_rows($hisory)."ORDER";
     $head = "<tr style="."background-color:#eaeaea;"."><th style="."padding-left:20px;"."><center>Time</center></th><th><center>Matched</center></th><th><center>Price</center></th><th style="."padding-right:20px;"."><center>Cancelled</center></th></tr>";
     $numrow = 0;
     $empty = 0;
-    while ($row2 = mysqli_fetch_array($history)) 
+    while ($row2 = mysqli_fetch_array($history))
       {
       if ( ($row2['matched_volume']==0) && ($row2['matched_price']==0) && ($row2['cancelled_volume']==0) )
         {
@@ -120,18 +120,18 @@ $output .= '<td class="column10">'.$row['order_status'].'</td>
         {
         $a .= $data[0];
         }
-      else 
+      else
         {
         $a .= $data[0];
         //echo "Total".$AmountOrder."<br>";
         for($x=1; $x!=$AmountOrder; $x++)
-          { 
+          {
           //echo "x is".$x."<br>";
-          //echo "Hi<br>"; 
+          //echo "Hi<br>";
           $a .= $data[$x];
           }
-        
-        
+
+
         }
       $output .= "<script>$('#b".$i."').click(function(){
         swal

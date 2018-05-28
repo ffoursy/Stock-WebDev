@@ -48,7 +48,7 @@
         if (mysqli_query($con, $sql3)) {
           //echo "Record updated successfully";
           echo 'success';
-          } 
+          }
         else {
           echo "Error updating record: " . mysqli_error($con);
           }
@@ -64,44 +64,45 @@
         $result5 = mysqli_query($con, $sql5);
         $i = 1;
         while ($matchSymbol = mysqli_fetch_array($result5))
-          { 
+          {
             $matchNum = $matchSymbol['order_number'];
-            $sql6 = "SELECT SUM(matched_volume) AS matched FROM order_history WHERE order_number = '$matchNum'";
+            $sql6 = "SELECT SUM(matched_volume) AS matched FROM order_history WHERE order_number = $matchNum";
             $result6 = mysqli_query($con,$sql6);
-            $row6 = mysqli_fetch_array($result6); 
+            $row6 = mysqli_fetch_array($result6);
             $balanceMatch = $matchSymbol['order_volume'] - $row6['matched'];
             if ($balanceMatch <= $volume)
-              { 
+              {
                 $sql7 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($matchNum, '$timestamp', $balanceMatch, $price)";
                 $insert = mysqli_query($con,$sql7);
 
                 date_default_timezone_set("Asia/Bangkok");
-                $Time1 = date("Y-m-d h:i:sa", strtotime("+$i second")); 
+                $Time1 = date("Y-m-d h:i:sa", strtotime("+$i second"));
 
                 $sql8 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
                 $result8 = mysqli_query($con,$sql8);
                 $row8 = mysqli_fetch_array($result8);
-                $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES(".$row8['order_number'].",'$Time1', $balanceMatch, $price)";
+                $test = $row8['order_number'];
+                $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($test,'$Time1', $balanceMatch, $price)";
                 $result9 = mysqli_query($con,$sql9);
 
                 $volume = $volume - $balanceMatch;
                 $i++;
-              } 
+              }
             else if ($balanceMatch > $volume)
               {
                 $sql7 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($matchNum, '$timestamp', $volume, $price)";
                 $insert = mysqli_query($con,$sql7);
 
                 $sql8 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
-                $result8 = mysqli_query($con,$sql88);
-                $row8 = mysqli_fetch_array($result88);
+                $result8 = mysqli_query($con,$sql8);
+                $row8 = mysqli_fetch_array($result8);
                 $test = $row8['order_number'];
 
                 date_default_timezone_set("Asia/Bangkok");
-                $Time2 = date("Y-m-d h:i:sa", strtotime("+$i second")); 
+                $Time2 = date("Y-m-d h:i:sa", strtotime("+$i second"));
 
                 $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($test,'$Time2', $volume, $price)";
-                $result9 = mysqli_query($con,$sql100);
+                $result9 = mysqli_query($con,$sql9);
                 $i++;
 
                 break;
@@ -137,44 +138,45 @@
             $result5 = mysqli_query($con, $sql5);
             $i = 1;
             while ($matchSymbol = mysqli_fetch_array($result5))
-              { 
+              {
                 $matchNum = $matchSymbol['order_number'];
-                $sql6 = "SELECT SUM(matched_volume) AS matched FROM order_history WHERE order_number = '$matchNum'";
+                $sql6 = "SELECT SUM(matched_volume) AS matched FROM order_history WHERE order_number = $matchNum";
                 $result6 = mysqli_query($con,$sql6);
-                $row6 = mysqli_fetch_array($result6); 
+                $row6 = mysqli_fetch_array($result6);
                 $balanceMatch = $matchSymbol['order_volume'] - $row6['matched'];
-                if ($balanceMatch < $volume)
-                  { 
+                if ($balanceMatch <= $volume)
+                  {
                     $sql7 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($matchNum, '$timestamp', $balanceMatch, $price)";
                     $insert = mysqli_query($con,$sql7);
 
                     date_default_timezone_set("Asia/Bangkok");
-                    $Time1 = date("Y-m-d h:i:sa", strtotime("+$i second")); 
+                    $Time1 = date("Y-m-d h:i:sa", strtotime("+$i second"));
 
                     $sql8 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
                     $result8 = mysqli_query($con,$sql8);
                     $row8 = mysqli_fetch_array($result8);
-                    $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES(".$row8['order_number'].",'$Time1', $balanceMatch, $price)";
+                    $test = $row8['order_number'];
+                    $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($test,'$Time1', $balanceMatch, $price)";
                     $result9 = mysqli_query($con,$sql9);
 
                     $volume = $volume - $balanceMatch;
                     $i++;
-                  } 
+                  }
                 else if ($balanceMatch > $volume)
                   {
                     $sql7 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($matchNum, '$timestamp', $volume, $price)";
                     $insert = mysqli_query($con,$sql7);
 
                     $sql8 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
-                    $result8 = mysqli_query($con,$sql88);
-                    $row8 = mysqli_fetch_array($result88);
+                    $result8 = mysqli_query($con,$sql8);
+                    $row8 = mysqli_fetch_array($result8);
                     $test = $row8['order_number'];
 
                     date_default_timezone_set("Asia/Bangkok");
-                    $Time2 = date("Y-m-d h:i:sa", strtotime("+$i second")); 
+                    $Time2 = date("Y-m-d h:i:sa", strtotime("+$i second"));
 
                     $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($test,'$Time2', $volume, $price)";
-                    $result9 = mysqli_query($con,$sql100);
+                    $result9 = mysqli_query($con,$sql9);
                     $i++;
 
                     break;
@@ -200,7 +202,7 @@
          if (!mysqli_query($con,$sql4)) {
            die('Error:'.mysqli_error($con));
          }
-         
+
         $sql444 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
         $result444 = mysqli_query($con,$sql444);
         $Order444 = mysqli_fetch_array($result444);
@@ -213,44 +215,45 @@
          $result5 = mysqli_query($con, $sql5);
          $i = 1;
         while ($matchSymbol = mysqli_fetch_array($result5))
-          { 
+          {
             $matchNum = $matchSymbol['order_number'];
             $sql6 = "SELECT SUM(matched_volume) AS matched FROM order_history WHERE order_number = $matchNum";
             $result6 = mysqli_query($con,$sql6);
-            $row6 = mysqli_fetch_array($result6); 
+            $row6 = mysqli_fetch_array($result6);
             $balanceMatch = $matchSymbol['order_volume'] - $row6['matched'];
             if ($balanceMatch <= $volume)
-              { 
+              {
                 $sql7 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($matchNum, '$timestamp', $balanceMatch, $price)";
                 $insert = mysqli_query($con,$sql7);
 
                 date_default_timezone_set("Asia/Bangkok");
-                $Time1 = date("Y-m-d h:i:sa", strtotime("+$i second")); 
+                $Time1 = date("Y-m-d h:i:sa", strtotime("+$i second"));
 
                 $sql8 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
                 $result8 = mysqli_query($con,$sql8);
                 $row8 = mysqli_fetch_array($result8);
-                $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES(".$row8['order_number'].",'$Time1', $balanceMatch, $price)";
+                $test = $row8['order_number'];
+                $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($test,'$Time1', $balanceMatch, $price)";
                 $result9 = mysqli_query($con,$sql9);
 
                 $volume = $volume - $balanceMatch;
                 $i++;
-              } 
+              }
             else
               {
                 $sql7 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($matchNum, '$timestamp', $volume, $price)";
                 $insert = mysqli_query($con,$sql7);
 
                 $sql8 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
-                $result8 = mysqli_query($con,$sql88);
-                $row8 = mysqli_fetch_array($result88);
+                $result8 = mysqli_query($con,$sql8);
+                $row8 = mysqli_fetch_array($result8);
                 $test = $row8['order_number'];
 
                 date_default_timezone_set("Asia/Bangkok");
-                $Time2 = date("Y-m-d h:i:sa", strtotime("+$i second")); 
+                $Time2 = date("Y-m-d h:i:sa", strtotime("+$i second"));
 
                 $sql9 = "INSERT INTO order_history(order_number,time_stamp,matched_volume,matched_price) VALUES($test,'$Time2', $volume, $price)";
-                $result9 = mysqli_query($con,$sql100);
+                $result9 = mysqli_query($con,$sql9);
                 $i++;
 
                 break;
