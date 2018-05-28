@@ -52,9 +52,17 @@
         else {
           echo "Error updating record: " . mysqli_error($con);
           }
+        $sql888 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
+        $result888 = mysqli_query($con,$sql888);
+        $Order888 = mysqli_fetch_array($result888);
+        $sql999 = "INSERT INTO order_history VALUES (".$Order888['order_number'].",'$timestamp',0,0,0)";
+        if (!mysqli_query($con,$sql999)) {
+          die('Error:'.mysqli_error($con));
+          }
+
         $sql5 = "SELECT o.order_number, o.order_volume FROM order_history h INNER JOIN stock_order o ON h.order_number = o.order_number WHERE o.symbol = '$symbol' AND o.order_type = 'sell' AND o.order_price = $price AND o.order_status = 'On process'";
         $result5 = mysqli_query($con, $sql5);
-        $i = 0;
+        $i = 1;
         while ($matchSymbol = mysqli_fetch_array($result5))
           { 
             $matchNum = $matchSymbol['order_number'];
@@ -116,9 +124,18 @@
             } else {
               echo "Error updating record: " . mysqli_error($con);
             }
+
+            $sql111 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
+            $result111 = mysqli_query($con,$sql111);
+            $Order111 = mysqli_fetch_array($result111);
+            $sql222 = "INSERT INTO order_history VALUES (".$Order111['order_number'].",'$timestamp',0,0,0)";
+            if (!mysqli_query($con,$sql222)) {
+              die('Error:'.mysqli_error($con));
+              }
+
             $sql5 = "SELECT o.order_number, o.order_volume FROM order_history h INNER JOIN stock_order o ON h.order_number = o.order_number WHERE o.symbol = '$symbol' AND o.order_type = 'buy' AND o.order_price = $price AND o.order_status = 'On process'";
             $result5 = mysqli_query($con, $sql5);
-            $i = 0;
+            $i = 1;
             while ($matchSymbol = mysqli_fetch_array($result5))
               { 
                 $matchNum = $matchSymbol['order_number'];
@@ -183,10 +200,18 @@
          if (!mysqli_query($con,$sql4)) {
            die('Error:'.mysqli_error($con));
          }
-         echo 'success';
+         
+        $sql444 = "SELECT order_number FROM stock_order WHERE order_type = '$orderType' AND symbol = '$symbol' AND order_price = $price AND order_volume = $volumeOriginal AND user_account_id = $id";
+        $result444 = mysqli_query($con,$sql444);
+        $Order444 = mysqli_fetch_array($result444);
+        $sql555 = "INSERT INTO order_history VALUES (".$Order444['order_number'].",'$timestamp',0,0,0)";
+        if (!mysqli_query($con,$sql555)) {
+          die('Error:'.mysqli_error($con));
+          }
+
          $sql5 = "SELECT o.order_number, o.order_volume FROM order_history h INNER JOIN stock_order o ON h.order_number = o.order_number WHERE o.symbol = '$symbol' AND o.order_type = 'sell' AND o.order_price = $price AND o.order_status = 'On process'";
          $result5 = mysqli_query($con, $sql5);
-         $i = 0;
+         $i = 1;
         while ($matchSymbol = mysqli_fetch_array($result5))
           { 
             $matchNum = $matchSymbol['order_number'];
